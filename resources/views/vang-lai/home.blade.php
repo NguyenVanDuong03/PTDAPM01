@@ -1,0 +1,1 @@
+@extends('khach-hang.home')
