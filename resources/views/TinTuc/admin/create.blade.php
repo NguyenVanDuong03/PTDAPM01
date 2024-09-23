@@ -23,6 +23,16 @@
         </div>
 
         <div class="d-flex flex-column gap-2">
+            <label for="MaLoaiTinTuc">Loại tin tức*</label>
+            <select class="form-select form-select-sm py-1 px-2 rounded border border-1" name="MaLoaiTinTuc" aria-label="Small select example" required>
+                <option value="" selected disabled>Vui lòng chọn loại tin tức</option>
+                @foreach($loaitintucs as $tintuc)
+                <option value="{{ $tintuc->MaLoaiTinTuc }}">{{ $tintuc->TenLoaiTinTuc }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="d-flex flex-column gap-2">
             <label for="TomTat">Tóm tắt*</label>
             <textarea name="TomTat" id="tom-tat" rows="2" placeholder="Nhập tóm tắt tin tức" class="py-1 px-2 rounded border border-1">{{ old('TomTat') }}</textarea>
             @error('TomTat')

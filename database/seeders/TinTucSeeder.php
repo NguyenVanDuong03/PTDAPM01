@@ -20,6 +20,7 @@ class TinTucSeeder extends Seeder
         for ($i = 0; $i < 50; $i++) {
             TinTuc::create([
                 'TenSuKien' => $faker->sentence(1),
+                'MaLoaiTinTuc' => $faker->numberBetween(1, 9),
                 'TomTat'=> $faker->sentence(2),
                 'NgayDang'=> $faker->dateTimeBetween('-10 months', 'now'),
                 'TenDangNhapNV'=> $users->random(),

@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('tin_tucs', function (Blueprint $table) {
             $table->id('MaTinTuc');
             $table->string('TenSuKien');
+            $table->unsignedBigInteger('MaLoaiTinTuc');
             $table->text('TomTat');
             $table->dateTime('NgayDang');
             $table->string('TenDangNhapNV');
             $table->text('NoiDung');
             $table->string('Anh');
             $table->foreign('TenDangNhapNV')->references('TenDangNhapNV')->on('nhan_viens');
+            $table->foreign('MaLoaiTinTuc')->references('MaLoaiTinTuc')->on('loai_tin_tucs');
             $table->softDeletes();
-            
+
         });
     }
 
