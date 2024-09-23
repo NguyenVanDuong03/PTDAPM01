@@ -29,6 +29,7 @@
                 <tr>
                     <th scope="col">Mã tin tức</th>
                     <th scope="col">Tên sự kiện</th>
+                    <th scope="col">Loại tin tức</th>
                     <th scope="col">Ngày đăng</th>
                     <th scope="col">Người đăng</th>
                     <th scope="col">Chức năng</th>
@@ -42,6 +43,13 @@
                         <div class="">
                             <a href="" class="text-black">
                                 {{$item->TenSuKien}}
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="">
+                            <a href="" class="text-black">
+                                {{$item->getTenLoaiTinTuc()->TenLoaiTinTuc}}
                             </a>
                         </div>
                     </td>

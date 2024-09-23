@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoaiTinTuc;
 use App\Models\NhanVien;
 use App\Models\TinTuc;
 use Illuminate\Http\Request;
@@ -18,17 +19,18 @@ class TinTucController extends Controller
     public function index()
     {
         $tintucs = TinTuc::all()->sortByDesc('MaTinTuc');
+        $loaitintucs = LoaiTinTuc::all();
         if (!Auth::check()) {
             return redirect()->route('home');
         } else {
             if (Auth::user()->VaiTro == 1) {
-                return view('TinTuc.admin.index', compact('tintucs'));
+                return view('TinTuc.admin.index', compact('tintucs', 'loaitintucs'));
             }
             if (Auth::user()->VaiTro == 2) {
-                return view('TinTuc.employee.index', compact('tintucs'));
+                return view('TinTuc.employee.index', compact('tintucs', 'loaitintucs'));
             }
             if (Auth::user()->VaiTro == 3) {
-                return view('TinTuc.customer.index', compact('tintucs'));
+                return view('TinTuc.customer.index', compact('tintucs', 'loaitintucs'));
             }
         }
     }
@@ -39,11 +41,12 @@ class TinTucController extends Controller
     public function create()
     {
         $nhanviens = NhanVien::all();
+        $loaitintucs = LoaiTinTuc::all();
         if (Auth::user()->VaiTro == 2) {
-            return view('TinTuc.employee.create', compact('nhanviens'));
+            return view('TinTuc.employee.create', compact('nhanviens', 'loaitintucs'));
         }
         if (Auth::user()->VaiTro == 1) {
-            return view('TinTuc.admin.create', compact('nhanviens'));
+            return view('TinTuc.admin.create', compact('nhanviens', 'loaitintucs'));
         }
     }
 
@@ -54,15 +57,17 @@ class TinTucController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'TenSuKien' => ['required', 'max: 40', 'regex:/^[\pL\s\d]+$/u'],
+            'MaLoaiTinTuc' => ['required'],
             'TomTat' => ['required', 'max: 300'],
             'NgayDang' => ['required'],
-            // 'TenDangNhapNV' => ['required', Rule::exists('nhan_viens', 'TenDangNhapNV')],
+            'TenDangNhapNV' => ['required', Rule::exists('nhan_viens', 'TenDangNhapNV')],
             'NoiDung' => ['required', 'max: 1000'],
             'Anh' => ['required', 'max:5120'],
         ], [
             'TenSuKien.required' => 'Tên sự kiện không được bỏ trống',
             'TenSuKien.max' => 'Tên sự kiện không quá 40 từ',
             'TenSuKien.regex' => 'Vui lòng kiểm tra lại thông tin',
+            'MaLoaiTinTuc.required' => 'Loại tin tức không được bỏ trống',
             'TomTat.required' => 'Tóm tắt không được bỏ trống',
             'TomTat.max' => 'Tóm tắt không quá 300 ký tự',
             'NgayDang.required' => 'Ngày đăng không được bỏ trống',
@@ -70,7 +75,7 @@ class TinTucController extends Controller
             'NoiDung.max' => 'Nội dung không quá 1000 ký tự',
             'Anh.required' => 'Ảnh tin tức không được bỏ trống',
             // 'TenDangNhapNV.exists' => 'Tên đăng nhập nhân viên không tồn tại',
-            // 'TenDangNhapNV.required' => 'Tên đăng nhập nhân viên không được bỏ trống',
+            'TenDangNhapNV.required' => 'Tên đăng nhập nhân viên không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -79,6 +84,7 @@ class TinTucController extends Controller
 
         $tintuc = new TinTuc();
         $tintuc->TenSuKien = $request->input('TenSuKien');
+        $tintuc->MaLoaiTinTuc = $request->input('MaLoaiTinTuc');
         $tintuc->TomTat = $request->input('TomTat');
         $tintuc->NgayDang = $request->input('NgayDang');
         $tintuc->TenDangNhapNV = $request->input('TenDangNhapNV');
