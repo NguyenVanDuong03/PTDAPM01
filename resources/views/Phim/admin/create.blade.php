@@ -31,13 +31,16 @@
             @enderror
         </div>
         <div class="flex-column d-flex gap-2">
-            <label for="TenPhim" class="">Thể loại phim*</label>
+            <label for="MaTheLoai" class="">Thể loại phim*</label>
             <select class="form-control" id="MaTheLoai" name="MaTheLoai">
                 <option value="" disabled selected>Thể loại</option>
                 @foreach($theloais as $theloai)
                 <option value="{{ $theloai->MaTheLoai }}">{{ $theloai->TenTheLoai }}</option>
                 @endforeach
             </select>
+            @error('MaTheLoai')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
         </div>
         <div class="flex-column d-flex gap-2">
             <label for="MaNCC" class="">Nhà cung cấp*</label>
@@ -49,6 +52,9 @@
                 @endif
                 @endforeach
             </select>
+            @error('MaNCC')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
         </div>
         <div class="flex-column d-flex gap-2">
             <label for="ThoiLuong" class="">Thời lượng*</label>
@@ -61,7 +67,7 @@
         <div class="flex-column d-flex gap-2">
             <label for="NgayCongChieu" class="">Ngày công chiếu*</label>
             <input type="date" id="NgayCongChieu" name="NgayCongChieu" class="py-1 px-2 rounded border border-1"
-                placeholder="Chọn ngày công chiếu" min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                placeholder="Chọn ngày công chiếu" min="<?php echo date('Y-m-d'); ?>" value="">
             @error('NgayCongChieu')
             <div class="text-danger fw-bold">{{$message}}</div>
             @enderror
@@ -73,6 +79,9 @@
                 <option value="Đang chiếu">Đang chiếu</option>
                 <option value="Sắp chiếu">Sắp chiếu</option>
             </select>
+            @error('TrangThai')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
         </div>
         <div class="flex-column d-flex gap-2">
             <label for="MoTa" class="">Tóm tắt</label>
