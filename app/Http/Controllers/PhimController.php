@@ -45,18 +45,27 @@ class PhimController extends Controller
         $validator = Validator::make($request->all(), [
             'MaTheLoai' => ['required'],
             'MaNCC' => ['required'],
-            'TenPhim' => ['required'],
-            'ThoiLuong' => ['required'],
+            'TenPhim' => ['required', 'unique:phims,TenPhim', 'max:100', 'regex:/^[A-Za-z0-9\s]+$/'],
+            'ThoiLuong' => ['required', 'max:300', 'min:1', 'numeric'],
             'NgayCongChieu' => ['required', 'date'],
+            'image' => ['required', 'mimes:jpeg,jpg,png', 'max:5120'],
             'TrangThai' => ['required'],
-            'image' => ['required'],
+        ], [
+            'MaTheLoai.required' => 'Tên thể loại không được bỏ trống',
+            'MaNCC.required' => 'Nhà cung cấp không được bỏ trống',
+            'TenPhim.required' => 'Tên phim không được bỏ trống',
+            'TenPhim.unique' => 'Phim đã tồn tại',
+            'TenPhim.max' => 'Tên phim vượt quá 100 ký tự',
+            'TenPhim.regex' => 'Tên phim không được chứa ký tự đặc biệt',
+            'ThoiLuong.required' => 'Thời lượng phim không được bỏ trống',
+            'NgayCongChieu.required' => 'Vui lòng chọn ngày công chiếu',
+            'TrangThai.required' => 'Trạng thái không được bỏ trống',
+            'image.required' => 'Vui lòng chọn ảnh',
+            'image.mimes' => 'Chỉ chấp nhận định dạng ảnh (JPEG, PNG)',
+            'image.max' => 'Ảnh phim vượt quá 5MB',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->with('mess_fail', 'Thêm không thành công. Vui lòng nhập đầy đủ thông tin');
-        }
-        $tenPhim = $request->input('TenPhim');
-        if (Phim::where('TenPhim', $tenPhim)->exists()) {
-            return redirect()->back()->with('mess_fail', 'Phim đã tồn tại');
+            return redirect()->back()->withErrors($validator)->withInput();
         }
         $phim = new Phim();
         $phim->MaTheLoai = $request->input('MaTheLoai');
