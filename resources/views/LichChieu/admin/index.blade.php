@@ -21,7 +21,7 @@
         <form id="findInfoWithDate" action="{{route('lichchieus.index')}}" method="get">
             @csrf
             <input value="{{ $ngayDang }}" type="date" name="NgayDang" id="selectDate" onchange="checkAndSubmitForm()">
-            
+            <div class="text-danger fw-bold text-error mt-1"></div>
         </form>
     </div>
     <div class="row">
@@ -32,8 +32,8 @@
                 <div class="d-flex gap-2 align-items-center my-2">
                     <form method="POST" action="{{ route('lichchieus.create_form') }}">
                         @csrf
-                        <button type="submit" class="rounded border border-2" style="background-color: transparent; border-color: #E0E0E0">Phòng {{ $item->MaPhong }}</button>
-                        
+                        <button type="submit" class="rounded border border-2 phong-chieu" style="background-color: transparent; border-color: #E0E0E0">Phòng {{ $item->MaPhong }}</button>
+
                             <input type="hidden" name="MaPhong" value="{{ $item->MaPhong }}">
                             <input type="hidden" name="NgayChieu" value="{{ $item->NgayChieu }}">
                             {{--<button type="submit" class="rounded border border-2" style="background-color: transparent; border-color: #E0E0E0">
@@ -45,7 +45,7 @@
                                     Sửa
                                 </button>
                             </button>--}}
-                       
+
                     </form>
                 </div>
             </div>
@@ -95,9 +95,18 @@
 @endsection
 @section('script')
 <script>
-    function checkAndSubmitForm() {
-        var selectDate = document.getElementById('selectDate').value;
-        document.getElementById('findInfoWithDate').submit();
+    $('#selectDate').change(function() {
+        if (new Date(this.value) <= new Date(new Date().setDate(new Date().getDate() - 1))) {
+            document.querySelector('.text-error').innerText = 'Ngày chiếu không được là ngày trong quá khứ';
+            $('.phong-chieu').attr('disabled', true);
+        } else {
+            document.querySelector('.text-error').innerText = '';
+            $('.phong-chieu').attr('disabled', false);
+            function checkAndSubmitForm() {
+            var selectDate = document.getElementById('selectDate').value;
+            document.getElementById('findInfoWithDate').submit();
     }
+        }
+    });
 </script>
-@endsection 
+@endsection

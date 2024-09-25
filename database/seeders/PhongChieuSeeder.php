@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\LoaiPhong;
 use App\Models\PhongChieu;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +16,14 @@ class PhongChieuSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $tinhTrangOptions = ['Bình thường', 'Ngưng sử dụng', 'Tạm ngưng'];
+        $tinhTrangOptions = ['Bình thường', 'Tạm ngưng', 'Ngừng sử dụng'];
+        $loaiphongs = LoaiPhong::pluck('MaLoaiPhong');
         for ($i = 1; $i < 10; $i++) {
             PhongChieu::create([
                 // 'MaPhong' =>  $i,
-                'SoLuongGhe' => $faker->numberBetween(30, 100),
+                'TenPhong' => 'Phòng ' . $i,
+                'MaLoaiPhong' => $loaiphongs->random(),
+                'SoLuongGhe' => $faker->numberBetween(20, 50),
                 'TinhTrang' => $faker->randomElement($tinhTrangOptions),
             ]);
         }

@@ -23,6 +23,7 @@
             <thead>
                 <tr>
                     <th style="text-align: left;" scope="col">Mã phòng chiếu</th>
+                    <th scope="col">Tên Phong chiếu</th>
                     <th scope="col">Số lượng</th>
                     <th scope="col">Tình trạng</th>
                     <th scope="col">Chức năng</th>
@@ -32,6 +33,13 @@
                 @foreach($phongchieus as $item)
                 <tr>
                     <td style="text-align: left;">{{$item->MaPhong}}</td>
+                    <td>
+                        <div class="">
+                            <a href="" class="text-black">
+                                {{$item->TenPhong}}
+                            </a>
+                        </div>
+                    </td>
                     <td>
                         <div class="">
                             <a href="" class="text-black">
