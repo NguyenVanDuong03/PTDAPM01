@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Console\Input\Input;
 
 class LichChieuController extends Controller
@@ -48,6 +49,16 @@ class LichChieuController extends Controller
         return view('LichChieu.admin.create', compact('phims', 'phongchieus'));
     }
     public function create_form(Request $request){
+        $validator = Validator::make($request->all(), [
+            // 'NgayChieu' => ['required', 'date'],
+            // 'MaPhong' => ['required', 'exists:phongchieus,MaPhong'],
+        ],
+        [
+            // 'NgayChieu.required' => 'Vui lòng chọn ngày chiếu',
+            // 'NgayChieu.date' => 'Ngày chiếu không hợp lệ',
+            // 'MaPhong.required' => 'Vui lòng chọn phòng chiếu',
+            // 'MaPhong.exists' => 'Phòng chiếu không tồn tại',
+        ]);
         $phims = Phim::all();
         $phongchieus = PhongChieu::all();
         //
@@ -71,14 +82,14 @@ class LichChieuController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $MaLichChieus = $request->input('MaLichChieu');
         $NgayChieu = $request->input('NgayChieu');
         $MaPhong = $request->input('MaPhong');
         // validate
         $ListOfTimes = [];
         foreach($MaLichChieus as $key => $MaLChs){
-            
+
             if($request->input('MaPhim')[$key] != -1){
                 // != -1 thì là item có giá trị cần chỉnh sửa và lưu => validate nó
                 $ThoiLuongPhim = Phim::where("MaPhim", $request->input('MaPhim')[$key])->first()->ThoiLuong;
@@ -101,7 +112,7 @@ class LichChieuController extends Controller
         }else{
             echo 'không trùng';
         }
-        
+
         if($request->has('NgayChieu')){
             // echo $NgayChieu;
             foreach ($MaLichChieus as $key => $maLCh) {
@@ -138,7 +149,7 @@ class LichChieuController extends Controller
         }else{
             echo 'ngay chieu null';
         }
-       
+
     }
 
 
@@ -183,7 +194,7 @@ class LichChieuController extends Controller
         // validate
         // $ListOfTimes = [];
         // foreach($MaLichChieus as $key => $MaLChs){
-            
+
         //     if($request->input('MaPhim')[$key] != -1){
         //         // != -1 thì là item có giá trị cần chỉnh sửa và lưu => validate nó
         //         $ThoiLuongPhim = Phim::where("MaPhim", $request->input('MaPhim')[$key])->first()->ThoiLuong;
@@ -206,7 +217,7 @@ class LichChieuController extends Controller
         // }else{
         //     echo 'không trùng';
         // }
-        
+
         if($request->has('NgayChieu')){
             // echo $NgayChieu;
             foreach ($MaLichChieus as $key => $maLCh) {
@@ -243,7 +254,7 @@ class LichChieuController extends Controller
         }else{
             echo 'ngay chieu null';
         }
-       
+
     }
     function checkTimeOverlap($a)
     {
@@ -274,21 +285,21 @@ class LichChieuController extends Controller
     // function checkTimeOverlap($a)
     // {
     //     $count = count($a);
-    
+
     //     for ($i = 0; $i < $count - 1; $i++) {
     //         for ($j = $i + 1; $j < $count; $j++) {
     //             $t1i = $a[$i][0];
     //             $t2i = $a[$i][1];
     //             $t1j = $a[$j][0];
     //             $t2j = $a[$j][1];
-    
+
     //             if ($t1i <= $t2j && $t1j <= $t2i) {
     //                 // Có sự trùng lặp thời gian
     //                 return true;
     //             }
     //         }
     //     }
-    
+
     //     // Không có chồng lấp thời gian
     //     return false;
     // }

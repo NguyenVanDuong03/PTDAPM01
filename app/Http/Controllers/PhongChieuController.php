@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoaiPhong;
 use App\Models\PhongChieu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -34,8 +35,9 @@ class PhongChieuController extends Controller
      */
     public function create()
     {
+        $loaiphongs = LoaiPhong::all();
         if (Auth::user()->VaiTro == 1) {
-            return view('PhongChieu.admin.create');
+            return view('PhongChieu.admin.create', compact('loaiphongs'));
         }
     }
 
@@ -45,13 +47,22 @@ class PhongChieuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'SoLuongGhe' => ['required', 'numeric', 'max:999'],
+            'TenPhong' => ['required', 'unique:phong_chieus,TenPhong', 'max:20', 'regex:/^[A-Za-z0-9\s]+$/'],
+            'SoLuongGhe' => ['required', 'numeric', 'min:1', 'max:50'],
             'TinhTrang' => ['required'],
+            'LoaiPhong' => ['required'],
         ], [
             // 'SoLuongGhe.min' => 'Thêm không thành công. Vui lòng nhập đầy đủ thông tin',
-            'SoLuongGhe.max' => 'Vui lòng nhập lại số lượng ghế',
+            'TenPhong.required' => 'Tên phòng không được bỏ trống',
+            'TenPhong.unique' => 'Phòng đã tồn tại',
+            'TenPhong.max' => 'Tên phòng không được vượt quá 20 ký tự',
+            'TenPhong.regex' => 'Tên phòng chỉ gồm chữ cái, số và khoảng trắng',
+            'SoLuongGhe.max' => 'Số lượng ghế tối đa là 50',
             'SoLuongGhe.required' => 'Số lượng ghế không được bỏ trống',
-            'TinhTrang.required' => 'Vui lòng nhập đầy đủ thông tin',
+            'SoLuongGhe.numeric' => 'Số lượng ghế phải là số nguyên lớn hơn 0',
+            'SoLuongGhe.min' => 'Số lượng ghế chỉ được phép là số nguyên lớn hơn 0',
+            'TinhTrang.required' => 'Vui lòng chọn tình trạng của phòng',
+            'LoaiPhong.required' => 'Loại phòng không được bỏ trống',
         ]);
 
         if ($validator->fails()) {
@@ -63,8 +74,10 @@ class PhongChieuController extends Controller
 
 
         PhongChieu::create([
+            'TenPhong' => $request->input('TenPhong'),
             'SoLuongGhe' => $request->input('SoLuongGhe'),
             'TinhTrang' => $request->input('TinhTrang'),
+            'MaLoaiPhong' => $request->input('LoaiPhong'),
         ]);
         return redirect()->route('phongchieus.index')->with('mess_success', 'Thêm thành công');
     }

@@ -3,7 +3,13 @@
 @section('content')
 <!-- BEGIN: Form -->
 <div class="col-8 col-md-10">
-    <h3>Chỉnh sửa thông tin lịch chiếu</h3>
+    <a href="{{route('lichchieus.index')}}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 19L5 12L12 5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </a>
+    <h3 class="text-center">Chỉnh sửa thông tin lịch chiếu</h3>
         {{--<form id="hidden-form"  action="{{route('lichchieus.create_form')}}" method="post">
             @csrf
             <div class="flex-column d-flex gap-2">
@@ -25,13 +31,13 @@
             <span style="width: 100px;"></span>
             <span>Ngày: {{$NgayChieu}}</span>
         </div>
-    @if(session('bat-dau-them-lich')) 
+    @if(session('bat-dau-them-lich'))
     <form id="storeForm" action="{{route('lichchieus.store')}}" class="d-grid gap-3 w-md-50 mx-auto" method="POST">
         @csrf
             {{-- Lưu lại ngày chiếu và mã phòng --}}
                 <input type="hidden" value="{{$NgayChieu}}" name="NgayChieu">
                 <input type="hidden" value="{{$MaPhong}}" name="MaPhong">
-                
+
             @if($infoLichChieu->LichChieus != null)
             <div class="row">
             @foreach($infoLichChieu->LichChieus as $lch)
@@ -72,7 +78,7 @@
                         @endforeach
                     </select>
                 </div>
-            
+
             @endfor
             </div>
             @else
@@ -95,8 +101,11 @@
                         <option value="{{$item->MaPhim}}">{{$item->TenPhim}}</option>
                         @endforeach
                     </select>
+                    @error('MaPhim[]')
+                    <div class="text-danger fw-bold">{{$message}}</div>
+                    @enderror
                 </div>
-            
+
             @endfor
             </div>
             @endif
@@ -158,6 +167,6 @@
         }
     });--}}
 
-   
+
 </script>
-@endsection 
+@endsection

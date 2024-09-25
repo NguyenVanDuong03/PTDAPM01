@@ -12,7 +12,7 @@ class DoAn extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    public $fillable = ['TenDoAn', 'MaTheLoai', 'TrangThai', 'Anh'];
+    public $fillable = ['Anh', 'TenDoAn', 'MaTheLoai', 'MoTa', 'TrangThai', ];
     protected $primaryKey = 'MaDoAn';
 
     function getLoaiDoAn()
@@ -25,5 +25,5 @@ class DoAn extends Model
             ->orderByDesc('ThoiGianTao')->first();
         return $lsgda->Gia;
     }
-   
+
 }

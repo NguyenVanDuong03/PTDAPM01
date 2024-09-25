@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('phong_chieus', function (Blueprint $table) {
             $table->id('MaPhong');
+            $table->string('TenPhong');
+            $table->unsignedBigInteger('MaLoaiPhong');
             $table->integer('SoLuongGhe');
             $table->string('TinhTrang');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('MaLoaiPhong')->references('MaLoaiPhong')->on('loai_phongs');
         });
     }
 

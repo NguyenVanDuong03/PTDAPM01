@@ -18,11 +18,12 @@ class DoAnSeeder extends Seeder
     {
         $faker = Faker::create();
         $matheloai = LoaiDoAn::pluck('MaTheLoai');
-        $trangthai = ['Đang bán', 'Ngừng bán'];
+        $trangthai = ['Có sẵn', 'Không có sẵn'];
         for ($i = 0; $i < 50; $i++) {
             $doan = DoAn::create([
-                'MaTheLoai' => $matheloai->random(),
                 'TenDoAn' => $faker->sentence(1),
+                'MaTheLoai' => $matheloai->random(),
+                'MoTa' => $faker->sentence(5),
                 'TinhTrang' => $faker->randomElement($trangthai),
                 'Anh' => $faker->imageUrl(300, 250, 'food'),
             ]);

@@ -50,6 +50,7 @@ class PhimController extends Controller
             'NgayCongChieu' => ['required', 'date'],
             'image' => ['required', 'mimes:jpeg,jpg,png', 'max:5120'],
             'TrangThai' => ['required'],
+            'MoTa' => ['required'],
         ], [
             'MaTheLoai.required' => 'Tên thể loại không được bỏ trống',
             'MaNCC.required' => 'Nhà cung cấp không được bỏ trống',
@@ -63,6 +64,7 @@ class PhimController extends Controller
             'image.required' => 'Vui lòng chọn ảnh',
             'image.mimes' => 'Chỉ chấp nhận định dạng ảnh (JPEG, PNG)',
             'image.max' => 'Ảnh phim vượt quá 5MB',
+            'MoTa.required' => 'Mô tả không được bỏ trống',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();

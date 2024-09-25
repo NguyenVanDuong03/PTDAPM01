@@ -86,6 +86,9 @@
         <div class="flex-column d-flex gap-2">
             <label for="MoTa" class="">Tóm tắt</label>
             <input type="text" id="MoTa" name="MoTa" class="py-1 px-2 rounded border border-1" placeholder="Nhập mô tả">
+            @error('MoTa')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
         </div>
         <div class="py-2 rounded text-center mt-5" style="background-color: #5F6D7E">
             <button type="submit" class="border-0 bg-transparent  text-white">
