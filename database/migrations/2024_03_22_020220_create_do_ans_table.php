@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('do_ans', function (Blueprint $table) {
             $table->id('MaDoAn');
-            $table->unsignedBigInteger('MaTheLoai');
-            $table->string('TenDoAn');
-            $table->string('TinhTrang');
             $table->string('Anh');
-
-            $table->foreign('MaTheLoai')->references('MaTheLoai')->on('loai_do_ans');
-
+            $table->string('TenDoAn');
+            $table->unsignedBigInteger('MaTheLoai');
+            $table->text('MoTa');
+            $table->string('TinhTrang');
+            $table->foreign('MaTheLoai')->references('MaTheLoai')->on('loai_do_ans')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

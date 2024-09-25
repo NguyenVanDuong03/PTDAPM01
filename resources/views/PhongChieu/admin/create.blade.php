@@ -15,6 +15,13 @@
         @csrf
 
         <div class="d-flex flex-column gap-2">
+            <label for="TenPhong">Tên phòng*</label>
+            <input type="text" id="TenPhong" name="TenPhong" placeholder="Nhập tên phòng" class="py-1 px-2 rounded border border-1">
+            @error('TenPhong')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
+        </div>
+        <div class="d-flex flex-column gap-2">
             <label for="so-luong-ghe">Số lượng ghế*</label>
             <input type="number" id="so-luong-ghe" name="SoLuongGhe" placeholder="Nhập số lượng ghế" class="py-1 px-2 rounded border border-1">
             @error('SoLuongGhe')
@@ -24,11 +31,24 @@
         <div class="d-flex flex-column gap-2">
             <label for="tinh-trang">Tình trạng ghế*</label>
             <select class="form-select form-select-sm" name="TinhTrang" aria-label="Small select example">
+                <option value="" disabled selected>Chọn tình trạng ghế</option>
                 <option value="Bình thường">Bình thường</option>
-                <option value="Ngưng sử dụng">Ngưng sử dụng</option>
-                <option value="Tạm ngưng">Tạm ngưng</option>
+                <option value="Ngưng sử dụng">Tạm ngưng</option>
+                <option value="Tạm ngưng">Ngừng sử dụng</option>
             </select>
             @error('TinhTrang')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <label for="LoaiPhong">Loại phòng*</label>
+            <select class="form-select form-select-sm" name="LoaiPhong" aria-label="Small select example">
+                <option value="" disabled selected>Chọn loại phòng</option>
+                @foreach ($loaiphongs as $item)
+                <option value="{{$item->MaLoaiPhong}}">{{$item->TenLoaiPhong}}</option>
+                @endforeach
+            </select>
+            @error('LoaiPhong')
             <div class="text-danger fw-bold">{{$message}}</div>
             @enderror
         </div>
