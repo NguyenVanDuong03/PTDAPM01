@@ -24,12 +24,15 @@
 
         <div class="d-flex flex-column gap-2">
             <label for="MaLoaiTinTuc">Loại tin tức*</label>
-            <select class="form-select form-select-sm py-1 px-2 rounded border border-1" name="MaLoaiTinTuc" aria-label="Small select example" required>
+            <select class="form-select form-select-sm py-1 px-2 rounded border border-1" name="MaLoaiTinTuc" aria-label="Small select example" >
                 <option value="" selected disabled>Vui lòng chọn loại tin tức</option>
                 @foreach($loaitintucs as $tintuc)
                 <option value="{{ $tintuc->MaLoaiTinTuc }}">{{ $tintuc->TenLoaiTinTuc }}</option>
                 @endforeach
             </select>
+            @error('MaLoaiTinTuc')
+            <div class="text-danger fw-bold">{{$message}}</div>
+            @enderror
         </div>
 
         <div class="d-flex flex-column gap-2">
@@ -50,15 +53,16 @@
             <div class="d-flex flex-column gap-2 col-6">
                 <label for="TenDangNhapNV">Tên nhân viên đăng bài*</label>
                 <select class="form-select form-select-sm py-1 px-2 rounded border border-1" name="TenDangNhapNV" aria-label="Small select example">
+                    <option value="" selected disabled>Vui lòng chọn nhân viên</option>
                     @foreach($nhanviens as $nhanvien)
                     <option value="{{ $nhanvien->TenDangNhapNV }}">{{ $nhanvien->TenNhanVien }}</option>
                     @endforeach
                 </select>
                 {{-- <label for="TenDangNhapNV">Tên đăng nhập nhân viên*</label>
                 <input value="{{ old('TenDangNhapNV') }}" type="text" id="ten-dang-nhap-nv" name="TenDangNhapNV" class="py-1 px-2 rounded border border-1"> --}}
-                {{-- @error('TenDangNhapNV')
+                @error('TenDangNhapNV')
                 <div class="text-danger fw-bold">{{$message}}</div>
-                @enderror --}}
+                @enderror
             </div>
 
         </div>

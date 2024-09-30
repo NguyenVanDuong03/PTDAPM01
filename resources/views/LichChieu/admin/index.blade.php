@@ -20,7 +20,8 @@
     <div class="d-flex flex-column gap-2 col-12 col-md-6">
         <form id="findInfoWithDate" action="{{route('lichchieus.index')}}" method="get">
             @csrf
-            <input value="{{ $ngayDang }}" type="date" name="NgayDang" id="selectDate" onchange="checkAndSubmitForm()">
+            {{-- <input value="{{ $ngayDang }}" type="date" name="NgayDang" id="selectDate" onchange="checkAndSubmitForm()"> --}}
+            <input value="" type="date" name="NgayDang" id="selectDate" onchange="checkAndSubmitForm()">
             <div class="text-danger fw-bold text-error mt-1"></div>
         </form>
     </div>
@@ -95,6 +96,12 @@
 @endsection
 @section('script')
 <script>
+    $(document).ready(function() {
+        if($('#selectDate').val().trim() === '') {
+            $('.phong-chieu').attr('disabled', true);
+        }
+    });
+
     $('#selectDate').change(function() {
         if (new Date(this.value) <= new Date(new Date().setDate(new Date().getDate() - 1))) {
             document.querySelector('.text-error').innerText = 'Ngày chiếu không được là ngày trong quá khứ';
@@ -105,7 +112,7 @@
             function checkAndSubmitForm() {
             var selectDate = document.getElementById('selectDate').value;
             document.getElementById('findInfoWithDate').submit();
-    }
+            }
         }
     });
 </script>
