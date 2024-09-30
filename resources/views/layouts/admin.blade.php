@@ -57,7 +57,7 @@
                             </a>
                         </li>
                         <li class="" id="thongkes">
-                            <a href="{{route('thongkes.index')}}" id="thong-ke"
+                            <a href="{{ route('thongkes.index') }}" id="thong-ke"
                                 class="text-black p-2 d-flex w-100 align-items-center gap-2">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -147,11 +147,11 @@
 
                                             </li>
                                             <li class="" id="quydinhs">
-                                                <a href="{{route('quydinhs.index')}}"
+                                                <a href="{{ route('quydinhs.index') }}"
                                                     class="text-black p-2 d-flex w-100 align-items-center gap-2">Quy
                                                     định</a>
                                             </li>
-                                            
+
                                             <li class="" id="tintucs">
 
                                                 <a href="{{ route('tintucs.index') }}"
@@ -213,6 +213,7 @@
 
 
     <script src={{ asset('asset/js/vendor.min.js') }}></script>
+    <script src={{ asset('asset/js/utils.js') }}></script>
     <script src={{ asset('asset/js/chart.min.js') }}></script>
     <script src={{ asset('asset/js/script.js') }}></script>
     <script src={{ asset('asset/jquery-3.7.1.min.js') }}></script>
@@ -233,6 +234,18 @@
                     formDangXuat.submit();
                 }
             });
+        });
+    </script>
+
+    {{-- Cắt chuỗi --}}
+    <script>
+        $(".cut_text").each(function(index) {
+            var text = $(this).text().trim();
+            var len = text.length;
+
+            if (len > 20) {
+                $(this).text(text.substr(0, 50) + '...');
+            }
         });
     </script>
     @yield('script')
