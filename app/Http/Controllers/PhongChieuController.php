@@ -48,7 +48,7 @@ class PhongChieuController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'TenPhong' => ['required', 'unique:phong_chieus,TenPhong', 'max:20', 'regex:/^[A-Za-z0-9\s]+$/'],
-            'SoLuongGhe' => ['required', 'numeric', 'min:1', 'max:50'],
+            'SoLuongGhe' => ['required', 'numeric', 'max:50', 'regex:/^[1-9][0-9]*$/'],
             'TinhTrang' => ['required'],
             'LoaiPhong' => ['required'],
         ], [
@@ -60,7 +60,7 @@ class PhongChieuController extends Controller
             'SoLuongGhe.max' => 'Số lượng ghế tối đa là 50',
             'SoLuongGhe.required' => 'Số lượng ghế không được bỏ trống',
             'SoLuongGhe.numeric' => 'Số lượng ghế phải là số nguyên lớn hơn 0',
-            'SoLuongGhe.min' => 'Số lượng ghế chỉ được phép là số nguyên lớn hơn 0',
+            'SoLuongGhe.regex' => 'Số lượng ghế chỉ được phép là số nguyên lớn hơn 0',
             'TinhTrang.required' => 'Vui lòng chọn tình trạng của phòng',
             'LoaiPhong.required' => 'Loại phòng không được bỏ trống',
         ]);
@@ -79,7 +79,7 @@ class PhongChieuController extends Controller
             'TinhTrang' => $request->input('TinhTrang'),
             'MaLoaiPhong' => $request->input('LoaiPhong'),
         ]);
-        return redirect()->route('phongchieus.index')->with('mess_success', 'Thêm thành công');
+        return redirect()->route('phongchieus.index')->with('mess_success', 'Thêm phòng thành công');
     }
 
 

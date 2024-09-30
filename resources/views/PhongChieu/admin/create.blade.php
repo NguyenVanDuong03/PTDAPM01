@@ -23,7 +23,7 @@
         </div>
         <div class="d-flex flex-column gap-2">
             <label for="so-luong-ghe">Số lượng ghế*</label>
-            <input type="number" id="so-luong-ghe" name="SoLuongGhe" placeholder="Nhập số lượng ghế" class="py-1 px-2 rounded border border-1">
+            <input type="text" id="so-luong-ghe" name="SoLuongGhe" placeholder="Nhập số lượng ghế" class="py-1 px-2 rounded border border-1">
             @error('SoLuongGhe')
             <div class="text-danger fw-bold">{{$message}}</div>
             @enderror

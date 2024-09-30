@@ -58,7 +58,7 @@
         </div>
         <div class="flex-column d-flex gap-2">
             <label for="ThoiLuong" class="">Thời lượng*</label>
-            <input type="number" id="ThoiLuong" min="1" max="100000" name="ThoiLuong" class="py-1 px-2 rounded border border-1"
+            <input type="number" id="ThoiLuong" name="ThoiLuong" class="py-1 px-2 rounded border border-1"
                 placeholder="Nhập thời lượng">
             @error('ThoiLuong')
             <div class="text-danger fw-bold">{{$message}}</div>

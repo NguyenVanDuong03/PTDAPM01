@@ -46,25 +46,29 @@ class PhimController extends Controller
             'MaTheLoai' => ['required'],
             'MaNCC' => ['required'],
             'TenPhim' => ['required', 'unique:phims,TenPhim', 'max:100', 'regex:/^[A-Za-z0-9\s]+$/'],
-            'ThoiLuong' => ['required', 'max:300', 'min:1', 'numeric'],
+            'ThoiLuong' => ['required', 'max:300', 'regex:/^[1-9][0-9]*$/'],
             'NgayCongChieu' => ['required', 'date'],
             'image' => ['required', 'mimes:jpeg,jpg,png', 'max:5120'],
             'TrangThai' => ['required'],
-            'MoTa' => ['required'],
+            'MoTa' => ['required', 'min:50', 'max: 1000'],
         ], [
             'MaTheLoai.required' => 'Tên thể loại không được bỏ trống',
-            'MaNCC.required' => 'Nhà cung cấp không được bỏ trống',
+            'MaNCC.required' => 'Tên nhà cung cấp không được bỏ trống',
             'TenPhim.required' => 'Tên phim không được bỏ trống',
             'TenPhim.unique' => 'Phim đã tồn tại',
             'TenPhim.max' => 'Tên phim vượt quá 100 ký tự',
             'TenPhim.regex' => 'Tên phim không được chứa ký tự đặc biệt',
             'ThoiLuong.required' => 'Thời lượng phim không được bỏ trống',
+            'ThoiLuong.regex' => 'Thời lượng phim phải là số dương',
+            'ThoiLuong.max' => 'Thời lượng phim quá 300 phút',
             'NgayCongChieu.required' => 'Vui lòng chọn ngày công chiếu',
             'TrangThai.required' => 'Trạng thái không được bỏ trống',
             'image.required' => 'Vui lòng chọn ảnh',
             'image.mimes' => 'Chỉ chấp nhận định dạng ảnh (JPEG, PNG)',
             'image.max' => 'Ảnh phim vượt quá 5MB',
-            'MoTa.required' => 'Mô tả không được bỏ trống',
+            'MoTa.required' => 'Tóm tắt không được bỏ trống',
+            'MoTa.min' => 'Tóm tắt phim không đủ 50 ký tự',
+            'MoTa.max' => 'Tóm tắt phim vượt quá 1000 ký tự'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -86,7 +90,7 @@ class PhimController extends Controller
         }
         $phim->save();
 
-        return redirect()->route('phims.index')->with('mess_success', 'Thêm mới thành công.');
+        return redirect()->route('phims.index')->with('mess_success', 'Thêm phim thành công');
     }
 
     /**
