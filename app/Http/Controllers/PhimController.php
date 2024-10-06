@@ -45,30 +45,30 @@ class PhimController extends Controller
         $validator = Validator::make($request->all(), [
             'MaTheLoai' => ['required'],
             'MaNCC' => ['required'],
-            'TenPhim' => ['required', 'unique:phims,TenPhim', 'max:100', 'regex:/^[A-Za-z0-9\s]+$/'],
+            'TenPhim' => ['required', 'unique:phims,TenPhim', 'max:100', 'regex:/^[\p{L}\p{N}\s]+$/u'],
             'ThoiLuong' => ['required', 'max:300', 'regex:/^[1-9][0-9]*$/'],
             'NgayCongChieu' => ['required', 'date'],
-            'image' => ['required', 'mimes:jpeg,jpg,png', 'max:5120'],
+            'image' => ['required', 'mimes:jpeg,png', 'max:5120'],
             'TrangThai' => ['required'],
-            'MoTa' => ['required', 'min:50', 'max: 1000'],
+            'TomTat' => ['required', 'min:50', 'max: 1000'],
         ], [
-            'MaTheLoai.required' => 'Tên thể loại không được bỏ trống',
-            'MaNCC.required' => 'Tên nhà cung cấp không được bỏ trống',
-            'TenPhim.required' => 'Tên phim không được bỏ trống',
-            'TenPhim.unique' => 'Phim đã tồn tại',
-            'TenPhim.max' => 'Tên phim vượt quá 100 ký tự',
-            'TenPhim.regex' => 'Tên phim không được chứa ký tự đặc biệt',
-            'ThoiLuong.required' => 'Thời lượng phim không được bỏ trống',
-            'ThoiLuong.regex' => 'Thời lượng phim phải là số dương',
-            'ThoiLuong.max' => 'Thời lượng phim quá 300 phút',
-            'NgayCongChieu.required' => 'Vui lòng chọn ngày công chiếu',
-            'TrangThai.required' => 'Trạng thái không được bỏ trống',
-            'image.required' => 'Vui lòng chọn ảnh',
-            'image.mimes' => 'Chỉ chấp nhận định dạng ảnh (JPEG, PNG)',
-            'image.max' => 'Ảnh phim vượt quá 5MB',
-            'MoTa.required' => 'Tóm tắt không được bỏ trống',
-            'MoTa.min' => 'Tóm tắt phim không đủ 50 ký tự',
-            'MoTa.max' => 'Tóm tắt phim vượt quá 1000 ký tự'
+            'MaTheLoai.required' => '',
+            'MaNCC.required' => '',
+            'TenPhim.required' => '',
+            'TenPhim.unique' => '',
+            'TenPhim.max' => '',
+            'TenPhim.regex' => '',
+            'ThoiLuong.required' => '',
+            'ThoiLuong.regex' => '',
+            'ThoiLuong.max' => '',
+            'NgayCongChieu.required' => '',
+            'TrangThai.required' => '',
+            'image.required' => '',
+            'image.mimes' => '',
+            'image.max' => '',
+            'TomTat.required' => '',
+            'TomTat.min' => '',
+            'TomTat.max' => ''
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -80,7 +80,7 @@ class PhimController extends Controller
         $phim->ThoiLuong = $request->input('ThoiLuong');
         $phim->NgayCongChieu = $request->input('NgayCongChieu');
         $phim->TrangThai = $request->input('TrangThai');
-        $phim->MoTa = $request->input('MoTa');
+        $phim->TomTat = $request->input('TomTat');
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -91,6 +91,14 @@ class PhimController extends Controller
         $phim->save();
 
         return redirect()->route('phims.index')->with('mess_success', 'Thêm phim thành công');
+    }
+
+    public function checkDuplicate(Request $request)
+    {
+        $filmName = $request->input('TenPhim');
+        $isDuplicate = Phim::where('TenPhim', $filmName)->exists();
+
+        return response()->json(['isDuplicate' => $isDuplicate]);
     }
 
     /**
@@ -144,7 +152,7 @@ class PhimController extends Controller
         $phim->ThoiLuong = $request->input('ThoiLuong');
         $phim->NgayCongChieu = $request->input('NgayCongChieu');
         $phim->TrangThai = $request->input('TrangThai');
-        $phim->MoTa = $request->input('MoTa');
+        $phim->TomTat = $request->input('TomTat');
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');

@@ -12,7 +12,7 @@
         </a>
     </div>
     <h3>Thêm phim</h3>
-    <form method="POST" enctype="multipart/form-data" action="{{ route('phims.store') }}"
+    <form id="form" method="POST" enctype="multipart/form-data" action="{{ route('phims.store') }}"
         class="d-grid gap-3 w-md-50 mx-auto">
         @csrf
         <div class="flex-column d-flex gap-2">
@@ -58,7 +58,7 @@
         </div>
         <div class="flex-column d-flex gap-2">
             <label for="ThoiLuong" class="">Thời lượng*</label>
-            <input type="number" id="ThoiLuong" name="ThoiLuong" class="py-1 px-2 rounded border border-1"
+            <input type="text" id="ThoiLuong" name="ThoiLuong" class="py-1 px-2 rounded border border-1"
                 placeholder="Nhập thời lượng">
             @error('ThoiLuong')
             <div class="text-danger fw-bold">{{$message}}</div>
@@ -67,7 +67,7 @@
         <div class="flex-column d-flex gap-2">
             <label for="NgayCongChieu" class="">Ngày công chiếu*</label>
             <input type="date" id="NgayCongChieu" name="NgayCongChieu" class="py-1 px-2 rounded border border-1"
-                placeholder="Chọn ngày công chiếu" min="<?php echo date('Y-m-d'); ?>" value="">
+                placeholder="Chọn ngày công chiếu" value="">
             @error('NgayCongChieu')
             <div class="text-danger fw-bold">{{$message}}</div>
             @enderror
@@ -84,14 +84,14 @@
             @enderror
         </div>
         <div class="flex-column d-flex gap-2">
-            <label for="MoTa" class="">Tóm tắt</label>
-            <input type="text" id="MoTa" name="MoTa" class="py-1 px-2 rounded border border-1" placeholder="Nhập mô tả">
-            @error('MoTa')
+            <label for="TomTat" class="">Tóm tắt</label>
+            <input type="text" id="TomTat" name="TomTat" class="py-1 px-2 rounded border border-1" placeholder="Nhập mô tả">
+            @error('TomTat')
             <div class="text-danger fw-bold">{{$message}}</div>
             @enderror
         </div>
         <div class="py-2 rounded text-center mt-5" style="background-color: #5F6D7E">
-            <button type="submit" class="border-0 bg-transparent  text-white">
+            <button id="btn_submit" type="submit" class="border-0 bg-transparent  text-white">
                 Thêm mới phim
             </button>
         </div>
@@ -122,4 +122,161 @@
     </div>
 </div>
 @endif
+@endsection
+
+@section('script')
+
+<script>
+        $(document).on('click', '#btn_submit', function(event) {
+            event.preventDefault();
+            let isValid = true;
+
+            // Kiểm tra tên phim
+            const film = $('#TenPhim');
+            const filmInput = film.val();
+            film.parent().find('.text-danger').remove();
+
+            if (!filmInput) {
+                film.parent().append('<div class="text-danger fw-bold">Tên phim không được bỏ trống</div>');
+                isValid = false;
+            } else if (filmInput.length > 100) {
+                film.parent().append('<div class="text-danger fw-bold">Tên phim không được quá 100 ký tự</div>');
+                isValid = false;
+            } else if (!/^[\p{L}\p{N}\s]+$/u.test(filmInput)) {
+                film.parent().append('<div class="text-danger fw-bold">Tên phim không được chứa ký tự đặc biệt</div>');
+                isValid = false;
+            } else {
+                if (isFilmNameDuplicate(filmInput)) {
+                    film.parent().append('<div class="text-danger fw-bold">Tên phim đã tồn tại</div>');
+                    isValid = false;
+                }
+            }
+
+            function isFilmNameDuplicate(filmName) {
+                let isDuplicate = false;
+                $.ajax({
+                    url: '{{ route("phims.checkDuplicate") }}',
+                    type: 'POST',
+                    async: false,
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        TenPhim: filmName
+                    },
+                    success: function (response) {
+                        isDuplicate = response.isDuplicate;
+                    }
+                });
+                return isDuplicate;
+            }
+
+            // Kiểm tra ảnh phim
+            const image = $('#Anhphim');
+            let imageInput = image[0];
+            image.parent().find('div.text-danger').remove();
+
+            if (!imageInput.files.length) {
+                image.parent().append('<div class="text-danger fw-bold">Ảnh phim không được bỏ trống</div>');
+                isValid = false;
+            } else if (imageInput.files[0].size > 5 * 1024 * 1024) {
+                image.parent().append('<div class="text-danger fw-bold">Ảnh phim vượt quá 5MB</div>');
+                isValid = false;
+            } else {
+                const file = imageInput.files[0];
+                const fileType = file['type'];
+                const validImageTypes = ['image/jpeg', 'image/png'];
+                if (!validImageTypes.includes(fileType)) {
+                    image.parent().append(
+                        '<div class="text-danger fw-bold">Ảnh phải có định dạng JPEG, PNG.</div>');
+                    isValid = false;
+                }
+            }
+
+            // Kiểm tra thể loại
+            const category = $('#MaTheLoai');
+            const categoryInput = category.val();
+            category.parent().find('.text-danger').remove();
+
+            if (!categoryInput) {
+                category.parent().append('<div class="text-danger fw-bold">Tên thể loại không được bỏ trống</div>');
+                isValid = false;
+            }
+
+            // Kiểm tra nhà cung cấp
+            const supplier = $('#MaNCC');
+            const supplierInput = supplier.val();
+            supplier.parent().find('.text-danger').remove();
+
+            if (!supplierInput) {
+                supplier.parent().append('<div class="text-danger fw-bold">Tên nhà cung cấp không được bỏ trống</div>');
+                isValid = false;
+            }
+
+            // Kiểm tra thời lượng
+            const duration = $('#ThoiLuong');
+            const durationInput = duration.val();
+            duration.parent().find('.text-danger').remove();
+
+            if (!durationInput) {
+                duration.parent().append('<div class="text-danger fw-bold">Thời lượng phim không được bỏ trống</div>');
+                isValid = false;
+            } else if (durationInput < 0) {
+                duration.parent().append('<div class="text-danger fw-bold">Thời lượng phim phải là số dương</div>');
+                isValid = false;
+            } else if (durationInput > 300) {
+                duration.parent().append('<div class="text-danger fw-bold">Thời lượng phim quá 300 phút</div>');
+                isValid = false;
+            } else if (!/^\d+$/.test(durationInput)) {
+                duration.parent().append('<div class="text-danger fw-bold">Thời lượng phim không được chứa ký tự đặc biệt và chữ</div>');
+                isValid = false;
+            }
+
+            // Kiểm tra ngày công chiếu
+            const releaseDate = $('#NgayCongChieu');
+            const releaseDateInput = releaseDate.val();
+            releaseDate.parent().find('.text-danger').remove();
+
+            if (!releaseDateInput) {
+                releaseDate.parent().append('<div class="text-danger fw-bold">Ngày công chiếu không được bỏ trống</div>');
+                isValid = false;
+            } else {
+                const currentDate = new Date();
+                const selectedDate = new Date(releaseDateInput);
+                if (selectedDate < currentDate) {
+                    releaseDate.parent().append('<div class="text-danger fw-bold">Ngày công chiếu không được trong quá khứ</div>');
+                    isValid = false;
+                }
+            }
+
+            // Kiểm tra trạng thái
+            const status = $('#TrangThai');
+            const statusInput = status.val();
+            status.parent().find('.text-danger').remove();
+
+            if (!statusInput) {
+                status.parent().append('<div class="text-danger fw-bold">Trạng thái không được bỏ trống</div>');
+                isValid = false;
+            }
+
+            // Kiểm tra tóm tắt
+            const description = $('#TomTat');
+            const descriptionInput = description.val();
+            description.parent().find('.text-danger').remove();
+
+            if (!descriptionInput) {
+                description.parent().append('<div class="text-danger fw-bold">Tóm tắt không được bỏ trống</div>');
+                isValid = false;
+            } else if (descriptionInput.length < 50) {
+                description.parent().append('<div class="text-danger fw-bold">Tóm tắt phim không đủ 50 ký tự</div>');
+                isValid = false;
+            } else if (descriptionInput.length > 1000) {
+                description.parent().append('<div class="text-danger fw-bold">Tóm tắt phim vượt quá 1000 ký tự</div>');
+                isValid = false;
+            }
+
+            if (isValid) {
+                this.submit();
+            }
+        });
+</script>
+
 @endsection

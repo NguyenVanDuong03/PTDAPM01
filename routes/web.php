@@ -91,6 +91,7 @@ Route::post('/searchnv', [NhanVienController::class, 'search'])->name('nhanviens
 // hết phần của Phong
 // module A
 Route::resource('phims', PhimController::class);
+Route::post('/phims/check-duplicate', [PhimController::class, 'checkDuplicate'])->name('phims.checkDuplicate');
 Route::resource('theloais', TheLoaiController::class);
 Route::resource('nhacungcaps', NhaCungCapController::class);
 // hết module A
