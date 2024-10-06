@@ -47,38 +47,35 @@ class DoAnController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'TenDoAn' => ['required', 'regex:/^[\pL\s\d]+$/u', 'max:50'],
-            'Gia' => ['required', 'numeric', 'min:1', 'max:1000000'],
+            'Anh' => ['required', 'max:20480', 'mimes:jpeg,jpg,png, gif'],
+            'TenDoAn' => ['required', 'regex:/^[\p{L}\p{N}\s]+$/u', 'max:255'],
             'MaTheLoai' => ['required'],
-            'Anh' => ['required', 'max:5120'],
+            'MoTa' => ['required', 'min:50', 'regex:/^[\p{L}\p{N}\s]+$/u'],
+            'Gia' => ['required', 'numeric', 'min:1000'],
             'TinhTrang' => ['required'],
         ], [
-            'TenDoAn.required' => 'Tên đồ ăn không được bỏ trống',
-            'TenDoAn.regex' => 'Vui lòng nhập đầy đủ thông tin',
-            'Anh.required' => 'Vui lòng nhập đầy đủ thông tin',
-            'Anh.max' => 'Kích thước file ảnh không quá 5MB',
-            'TenDoAn.max' => 'Tên đồ ăn không quá 50 ký tự',
-            'Gia.required' => 'Giá không được bỏ trống',
-            'Gia.min' => 'Thêm không thành công. Vui lòng nhập đầy đủ thông tin',
-            'Gia.max' => 'Giá không quá 1.000.000',
-            'MaTheLoai.required' => 'Vui lòng nhập đầy đủ thông tin',
+            'Anh.required' => '',
+            'Anh.mimes' => '',
+            'Anh.max' => '',
+            'TenDoAn.required' => '',
+            'TenDoAn.max' => '',
+            'TenDoAn.regex' => '',
+            'MaTheLoai.required' => '',
+            'MoTa.required' => '',
+            'MoTa.min' => '',
+            'MoTa.regex' => '',
+            'Gia.required' => '',
+            'Gia.min' => '',
+            'TinhTrang.required' => '',
         ]);
-        if (DoAn::where('TenDoAn', $request->TenDoAn)->exists()) {
-            $validator->errors()->add('TenDoAn', 'Tên đồ ăn đã tồn tại');
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        if ($request->input('MaTheLoai') === "none" || $request->input('TinhTrang') === "none") {
-            // $validator->errors()->add('MaTheLoai', 'Vui lòng nhập đầy đủ thông tin');
-            // return redirect()->back()->withErrors($validator)->withInput();
-            return redirect()->back()->with('mess_fail', 'Vui lòng nhập đầy đủ thông tin');
-        }
 
-        // $doan = DoAn::create($request->all());
         $doan = new DoAn();
         $doan->MaTheLoai = $request->input('MaTheLoai');
+        $doan->MoTa = $request->input('MoTa');
         $doan->TenDoAn = $request->input('TenDoAn');
         $doan->TinhTrang = $request->input('TinhTrang');
 
@@ -94,8 +91,7 @@ class DoAnController extends Controller
         $lichsugia->ThoiGianTao = now();
         $lichsugia->Gia = $request->input('Gia');
         $lichsugia->save();
-        return redirect()->route('doans.index')->with('mess_success', 'Thêm thành công.');
-        // // echo ("kkkkkkkkkkkkk");
+        return redirect()->route('doans.index')->with('mess_success', 'Thêm đồ ăn thành công');
     }
 
     /**

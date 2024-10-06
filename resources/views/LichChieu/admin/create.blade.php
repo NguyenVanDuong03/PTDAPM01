@@ -59,18 +59,18 @@
                     </select>
                 </div>
             @endforeach
-            @for($i = 0; $i < 8 - count($infoLichChieu->LichChieus); $i++)
+            @for($i = 0; $i < 2 - count($infoLichChieu->LichChieus); $i++)
                 <input type="hidden" name="MaLichChieu[]" value="-1" id="">
                 <div class="col-3 flex-column d-flex">
                     <label for="ten-do-an" class="gap-2">Thời gian*</label>
-                    <input value="00:00" name="GioChieu[]" type="time"  class="py-1 px-2 rounded border border-1" placeholder="Chọn thời gian chiếu phim">
+                    <input id="GioChieu" name="GioChieu[]" type="time"  class="py-1 px-2 rounded border border-1" placeholder="Chọn thời gian chiếu phim">
                     @error('GioChieu')
                     <div class="text-danger fw-bold">{{$message}}</div>
                     @enderror
                 </div>
                 <div class="flex-column d-flex gap-2 col-3">
                 <label for="the-loai-do-an">Tên phim*</label>
-                    <select class="form-select form-select-sm" aria-label="Small select example" name="MaPhim[]">
+                    <select id="MaPhim" class="form-select form-select-sm" aria-label="Small select example" name="MaPhim[]">
                         <!-- <option selected>Tên thể loại đồ ăn</option> -->
                         <option value="-1">Lựa chọn</option>
                         @foreach($phims as $item)
@@ -110,7 +110,7 @@
             </div>
             @endif
             <div class="py-2 rounded text-center mt-5" style="background-color: #5F6D7E">
-                <button type="submit" class="border-0 bg-transparent  text-white">
+                <button id="btn_submit" type="submit" class="border-0 bg-transparent  text-white">
                     Lưu lại
                 </button>
             </div>
@@ -166,7 +166,28 @@
             });
         }
     });--}}
+</script>
 
+<script>
+    $(document).on('click', '#btn_submit', function(e) {
+        e.preventDefault();
+        let isValid = true;
 
+        // Kiểm tra thời gian
+        const gioChieu = $('#GioChieu');
+        let gioChieuInput = gioChieu.val();
+        gioChieu.parent().find('.text-danger').remove();
+
+        if (!gioChieuInput) {
+            gioChieu.after('<div class="text-danger fw-bold">Thời gian không được để trống</div>');
+            isValid = false;
+        } else {
+            gioChieuInput = gioChieuInput.split(':');
+            if (gioChieuInput[0] < 0 || gioChieuInput[0] > 23 || gioChieuInput[1] < 0 || gioChieuInput[1] > 59) {
+                gioChieu.after('<div class="text-danger fw-bold">Thời gian không hợp lệ</div>');
+                isValid = false;
+            }
+        }
+    });
 </script>
 @endsection
