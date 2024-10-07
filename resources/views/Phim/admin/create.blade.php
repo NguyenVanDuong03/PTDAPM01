@@ -17,7 +17,7 @@
         @csrf
         <div class="flex-column d-flex gap-2">
             <label for="TenPhim" class="">Tên phim*</label>
-            <input type="text" maxlength="255" id="TenPhim" name="TenPhim" class="py-1 px-2 rounded border border-1"
+            <input type="text" id="TenPhim" name="TenPhim" class="py-1 px-2 rounded border border-1"
                 placeholder="Nhập tên phim">
             @error('TenPhim')
             <div class="text-danger fw-bold">{{$message}}</div>
