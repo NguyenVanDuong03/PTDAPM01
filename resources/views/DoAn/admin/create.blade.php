@@ -171,7 +171,7 @@
             } else if (naemInput.length > 255) {
                 name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không quá 255 ký tự</div>');
                 isValid = false;
-            } else if (!/^[a-zA-Z0-9 ]+$/.test(naemInput)) {
+            } else if (!/^[\p{L}\p{N}\s]+$/u.test(naemInput)) {
                 name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không chứa ký tự đặc biệt</div>');
                 isValid = false;
             }
@@ -198,7 +198,7 @@
                 description.parent().append(
                     '<div class="text-danger fw-bold">Mô tả đồ ăn tối thiểu 50 ký tự</div>');
                 isValid = false;
-            } else if (!/^[a-zA-Z0-9 ]+$/.test(descriptionInput)) {
+            } else if (!/^[\p{L}\p{N}\s]+$/u.test(descriptionInput)) {
                 description.parent().append(
                     '<div class="text-danger fw-bold">Mô tả đồ ăn không chứa ký tự đặc biệt</div>');
                 isValid = false;

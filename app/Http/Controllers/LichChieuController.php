@@ -145,7 +145,7 @@ class LichChieuController extends Controller
                     }
                 }
             }
-            return redirect()->route('lichchieus.index')->with('mes', 'Đã lưu thay dổi');
+            return redirect()->route('lichchieus.index')->with('mes', 'Thêm lịch chiếu thành công');
         }else{
             echo 'ngay chieu null';
         }
