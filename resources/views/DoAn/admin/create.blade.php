@@ -135,100 +135,230 @@
     </script>
 
     <script>
-        $(document).on('click', '#btn_submit', function(e) {
-            e.preventDefault();
-            let isValid = true;
+        $(document).ready(function() {
+            
+            function image() {
+                const image = $('#image');
+                let imageInput = image[0];
+                image.parent().find('div.text-danger').remove();
 
-            // Kiểm tra ảnh
-            const image = $('#image');
-            let imageInput = image[0];
-            image.parent().find('div.text-danger').remove();
+                if (!imageInput.files.length) {
+                    image.parent().append('<div class="text-danger fw-bold">Ảnh đồ ăn không được bỏ trống</div>');
+                    return false;
+                } else if (imageInput.files[0].size > 20 * 1024 * 1024) {
+                    image.parent().append('<div class="text-danger fw-bold">Ảnh không vượt quá 20MB</div>');
+                    return false;
+                } else {
+                    const file = imageInput.files[0];
+                    const fileType = file['type'];
+                    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                    if (!validImageTypes.includes(fileType)) {
+                        image.parent().append(
+                            '<div class="text-danger fw-bold">Ảnh phải có định dạng JPG, PNG, GIF</div>');
+                        return false;
+                    }
+                }
+                return true;
+            }
 
-            if (!imageInput.files.length) {
-                image.parent().append('<div class="text-danger fw-bold">Ảnh đồ ăn không được bỏ trống</div>');
-                isValid = false;
-            } else if (imageInput.files[0].size > 20 * 1024 * 1024) {
-                image.parent().append('<div class="text-danger fw-bold">Ảnh không vượt quá 20MB</div>');
-                isValid = false;
-            } else {
-                const file = imageInput.files[0];
-                const fileType = file['type'];
-                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-                if (!validImageTypes.includes(fileType)) {
-                    image.parent().append(
-                        '<div class="text-danger fw-bold">Ảnh phải có định dạng JPG, PNG, GIF</div>');
+            function name() {
+                const name = $('#ten-do-an');
+                let naemInput = name.val();
+                name.parent().find('div.text-danger').remove();
+                if (!naemInput) {
+                    name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không được bỏ trống</div>');
+                    return false;
+                } else if (naemInput.length > 255) {
+                    name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không quá 255 ký tự</div>');
+                    return false;
+                } else if (!/^[\p{L}\p{N}\s]+$/u.test(naemInput)) {
+                    name.parent().append(
+                        '<div class="text-danger fw-bold">Tên đồ ăn không chứa ký tự đặc biệt</div>');
+                    return false;
+                }
+                return true;
+            }
+
+            function category() {
+                const category = $('select[name="MaTheLoai"]');
+                let categoryInput = category.val();
+                category.parent().find('div.text-danger').remove();
+                if (!categoryInput) {
+                    category.parent().append(
+                        '<div class="text-danger fw-bold">Thể loại đồ ăn không được bỏ trống</div>');
+                    return false;
+                }
+                return true;
+            }
+
+            function description() {
+                const description = $('#Mo-Ta');
+                let descriptionInput = description.val();
+                description.parent().find('div.text-danger').remove();
+                if (!descriptionInput) {
+                    description.parent().append(
+                        '<div class="text-danger fw-bold">Mô tả đồ ăn không được bỏ trống</div>');
+                    return false;
+                } else if (!/^[\p{L}\p{N}\s]+$/u.test(descriptionInput)) {
+                    description.parent().append(
+                        '<div class="text-danger fw-bold">Mô tả đồ ăn không chứa ký tự đặc biệt</div>');
+                    return false;
+                } else if (descriptionInput.length < 50) {
+                    description.parent().append(
+                        '<div class="text-danger fw-bold">Mô tả đồ ăn tối thiểu 50 ký tự</div>');
+                    return false;
+                }
+                return true;
+            }
+
+            function price() {
+                const price = $('#Gia');
+                let priceInput = price.val();
+                price.parent().find('div.text-danger').remove();
+                if (!priceInput) {
+                    price.parent().append('<div class="text-danger fw-bold">Giá đồ ăn không được bỏ trống</div>');
+                    return false;
+                } else if (isNaN(priceInput) || priceInput < 1000) {
+                    price.parent().append('<div class="text-danger fw-bold">Giá đồ ăn tối thiểu 1000 (VND)</div>');
+                    return false;
+                }
+                return true;
+            }
+
+            function status() {
+                const status = $('select[name="TinhTrang"]');
+                let statusInput = status.val();
+                status.parent().find('div.text-danger').remove();
+                if (!statusInput) {
+                    status.parent().append(
+                        '<div class="text-danger fw-bold">Tình trạng đồ ăn không được bỏ trống</div>');
+                    return false;
+                }
+                return true;
+            }
+
+            $('#form').submit(function(e) {
+                e.preventDefault();
+                let isValid = true;
+                if (!image()) {
                     isValid = false;
                 }
-            }
-
-            // Kiểm tra tên đồ ăn
-            const name = $('#ten-do-an');
-            let naemInput = name.val();
-            name.parent().find('div.text-danger').remove();
-            if (!naemInput) {
-                name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không được bỏ trống</div>');
-                isValid = false;
-            } else if (naemInput.length > 255) {
-                name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không quá 255 ký tự</div>');
-                isValid = false;
-            } else if (!/^[\p{L}\p{N}\s]+$/u.test(naemInput)) {
-                name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không chứa ký tự đặc biệt</div>');
-                isValid = false;
-            }
-
-            // Kiểm tra thể loại
-            const category = $('select[name="MaTheLoai"]');
-            let categoryInput = category.val();
-            category.parent().find('div.text-danger').remove();
-            if (!categoryInput) {
-                category.parent().append(
-                    '<div class="text-danger fw-bold">Thể loại đồ ăn không được bỏ trống</div>');
-                isValid = false;
-            }
-
-            // Kiểm tra mô tả
-            const description = $('#Mo-Ta');
-            let descriptionInput = description.val();
-            description.parent().find('div.text-danger').remove();
-            if (!descriptionInput) {
-                description.parent().append(
-                    '<div class="text-danger fw-bold">Mô tả đồ ăn không được bỏ trống</div>');
-                isValid = false;
-            } else if (descriptionInput.length < 50) {
-                description.parent().append(
-                    '<div class="text-danger fw-bold">Mô tả đồ ăn tối thiểu 50 ký tự</div>');
-                isValid = false;
-            } else if (!/^[\p{L}\p{N}\s]+$/u.test(descriptionInput)) {
-                description.parent().append(
-                    '<div class="text-danger fw-bold">Mô tả đồ ăn không chứa ký tự đặc biệt</div>');
-                isValid = false;
-            }
-
-            // Kiểm tra giá
-            const price = $('#Gia');
-            let priceInput = price.val();
-            price.parent().find('div.text-danger').remove();
-            if (!priceInput) {
-                price.parent().append('<div class="text-danger fw-bold">Giá đồ ăn không được bỏ trống</div>');
-                isValid = false;
-            } else if (isNaN(priceInput) || priceInput < 1000) {
-                price.parent().append('<div class="text-danger fw-bold">Giá đồ ăn tối thiểu 1000 (VND)</div>');
-                isValid = false;
-            }
-
-            // Kiểm tra tình trạng
-            const status = $('select[name="TinhTrang"]');
-            let statusInput = status.val();
-            status.parent().find('div.text-danger').remove();
-            if (!statusInput) {
-                status.parent().append(
-                    '<div class="text-danger fw-bold">Tình trạng đồ ăn không được bỏ trống</div>');
-                isValid = false;
-            }
-
-            if (isValid) {
-                $('#form').submit();
-            }
+                if (!name()) {
+                    isValid = false;
+                }
+                if (!category()) {
+                    isValid = false;
+                }
+                if (!description()) {
+                    isValid = false;
+                }
+                if (!price()) {
+                    isValid = false;
+                }
+                if (!status()) {
+                    isValid = false;
+                }
+                if (isValid) {
+                    $('#form').submit();
+                }
+            });
         });
+
+
+        // $(document).on('click', '#btn_submit', function(e) {
+        //     e.preventDefault();
+        //     let isValid = true;
+
+        //     // Kiểm tra ảnh
+        //     const image = $('#image');
+        //     let imageInput = image[0];
+        //     image.parent().find('div.text-danger').remove();
+
+        //     if (!imageInput.files.length) {
+        //         image.parent().append('<div class="text-danger fw-bold">Ảnh đồ ăn không được bỏ trống</div>');
+        //         isValid = false;
+        //     } else if (imageInput.files[0].size > 20 * 1024 * 1024) {
+        //         image.parent().append('<div class="text-danger fw-bold">Ảnh không vượt quá 20MB</div>');
+        //         isValid = false;
+        //     } else {
+        //         const file = imageInput.files[0];
+        //         const fileType = file['type'];
+        //         const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+        //         if (!validImageTypes.includes(fileType)) {
+        //             image.parent().append(
+        //                 '<div class="text-danger fw-bold">Ảnh phải có định dạng JPG, PNG, GIF</div>');
+        //             isValid = false;
+        //         }
+        //     }
+
+        //     // Kiểm tra tên đồ ăn
+        //     const name = $('#ten-do-an');
+        //     let naemInput = name.val();
+        //     name.parent().find('div.text-danger').remove();
+        //     if (!naemInput) {
+        //         name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không được bỏ trống</div>');
+        //         isValid = false;
+        //     } else if (naemInput.length > 255) {
+        //         name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không quá 255 ký tự</div>');
+        //         isValid = false;
+        //     } else if (!/^[\p{L}\p{N}\s]+$/u.test(naemInput)) {
+        //         name.parent().append('<div class="text-danger fw-bold">Tên đồ ăn không chứa ký tự đặc biệt</div>');
+        //         isValid = false;
+        //     }
+
+        //     // Kiểm tra thể loại
+        //     const category = $('select[name="MaTheLoai"]');
+        //     let categoryInput = category.val();
+        //     category.parent().find('div.text-danger').remove();
+        //     if (!categoryInput) {
+        //         category.parent().append(
+        //             '<div class="text-danger fw-bold">Thể loại đồ ăn không được bỏ trống</div>');
+        //         isValid = false;
+        //     }
+
+        //     // Kiểm tra mô tả
+        //     const description = $('#Mo-Ta');
+        //     let descriptionInput = description.val();
+        //     description.parent().find('div.text-danger').remove();
+        //     if (!descriptionInput) {
+        //         description.parent().append(
+        //             '<div class="text-danger fw-bold">Mô tả đồ ăn không được bỏ trống</div>');
+        //         isValid = false;
+        //     } else if (descriptionInput.length < 50) {
+        //         description.parent().append(
+        //             '<div class="text-danger fw-bold">Mô tả đồ ăn tối thiểu 50 ký tự</div>');
+        //         isValid = false;
+        //     } else if (!/^[\p{L}\p{N}\s]+$/u.test(descriptionInput)) {
+        //         description.parent().append(
+        //             '<div class="text-danger fw-bold">Mô tả đồ ăn không chứa ký tự đặc biệt</div>');
+        //         isValid = false;
+        //     }
+
+        //     // Kiểm tra giá
+        //     const price = $('#Gia');
+        //     let priceInput = price.val();
+        //     price.parent().find('div.text-danger').remove();
+        //     if (!priceInput) {
+        //         price.parent().append('<div class="text-danger fw-bold">Giá đồ ăn không được bỏ trống</div>');
+        //         isValid = false;
+        //     } else if (isNaN(priceInput) || priceInput < 1000) {
+        //         price.parent().append('<div class="text-danger fw-bold">Giá đồ ăn tối thiểu 1000 (VND)</div>');
+        //         isValid = false;
+        //     }
+
+        //     // Kiểm tra tình trạng
+        //     const status = $('select[name="TinhTrang"]');
+        //     let statusInput = status.val();
+        //     status.parent().find('div.text-danger').remove();
+        //     if (!statusInput) {
+        //         status.parent().append(
+        //             '<div class="text-danger fw-bold">Tình trạng đồ ăn không được bỏ trống</div>');
+        //         isValid = false;
+        //     }
+
+        //     if (isValid) {
+        //         $('#form').submit();
+        //     }
+        // });
     </script>
 @endsection

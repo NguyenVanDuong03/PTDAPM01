@@ -146,116 +146,264 @@
     </script>
 
     <script>
-        $(document).on('click', '#btn_submit', function(e) {
-            e.preventDefault();
-            let isValid = true;
-
-            // Kiểm tra tên sự kiện
-            const tenSuKien = $('#ten-su-kien');
-            let tenSuKienInput = tenSuKien.val();
-            tenSuKien.parent().find('.text-danger').remove();
-            if (!tenSuKienInput) {
-                tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không được bỏ trống</div>');
-                isValid = false;
-            } else if (tenSuKienInput.length > 255) {
-                tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không quá 255 ký tự</div>');
-                isValid = false;
-            } else if (!/^[a-zA-Z0-9 ]+$/.test(tenSuKienInput)) {
-                tenSuKien.parent().append(
-                    '<div class="text-danger fw-bold">Tên tin tức không chứa ký tự đặc biệt</div>');
-                isValid = false;
+        $(document).ready(function() {
+            
+            function tenSuKien() {
+                const tenSuKien = $('#ten-su-kien');
+                let tenSuKienInput = tenSuKien.val();
+                tenSuKien.parent().find('.text-danger').remove();
+                if (!tenSuKienInput) {
+                    tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không được bỏ trống</div>');
+                    return false;
+                } else if (tenSuKienInput.length > 255) {
+                    tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không quá 255 ký tự</div>');
+                    return false;
+                } else if (!/^[a-zA-Z0-9 ]+$/.test(tenSuKienInput)) {
+                    tenSuKien.parent().append(
+                        '<div class="text-danger fw-bold">Tên tin tức không chứa ký tự đặc biệt</div>');
+                    return false;
+                }
+                return true;
             }
 
-            // Kiểm tra loại tin tức
-            const loaiTinTuc = $('select[name="MaLoaiTinTuc"]');
-            let loaiTinTucInput = loaiTinTuc.val();
-            loaiTinTuc.parent().find('.text-danger').remove();
-            if (!loaiTinTucInput) {
-                loaiTinTuc.parent().append(
-                    '<div class="text-danger fw-bold">Loại tin tức không được để trống</div>');
-                isValid = false;
+            function loaiTinTuc() {
+                const loaiTinTuc = $('select[name="MaLoaiTinTuc"]');
+                let loaiTinTucInput = loaiTinTuc.val();
+                loaiTinTuc.parent().find('.text-danger').remove();
+                if (!loaiTinTucInput) {
+                    loaiTinTuc.parent().append(
+                        '<div class="text-danger fw-bold">Loại tin tức không được để trống</div>');
+                    return false;
+                }
+                return true;
             }
 
-            // Kiểm tra tóm tắt
-            const tomTat = $('#tom-tat');
-            let tomTatInput = tomTat.val();
-            tomTat.parent().find('.text-danger').remove();
-            if (!tomTatInput) {
-                tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không được bỏ trống</div>');
-                isValid = false;
-            } else if (tomTatInput.length > 500) {
-                tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không quá 500 ký tự</div>');
-                isValid = false;
-            } else if (!/^[a-zA-Z0-9 ]+$/.test(tomTatInput)) {
-                tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không chứa ký tự đặc biệt</div>');
-                isValid = false;
+            function tomTat() {
+                const tomTat = $('#tom-tat');
+                let tomTatInput = tomTat.val();
+                tomTat.parent().find('.text-danger').remove();
+                if (!tomTatInput) {
+                    tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không được bỏ trống</div>');
+                    return false;
+                } else if (tomTatInput.length > 500) {
+                    tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không quá 500 ký tự</div>');
+                    return false;
+                } else if (!/^[a-zA-Z0-9 ]+$/.test(tomTatInput)) {
+                    tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không chứa ký tự đặc biệt</div>');
+                    return false;
+                }
+                return true;
             }
 
-            // Kiểm tra ngày đăng
-            const ngayDang = $('#ngay-dang');
-            let ngayDangInput = ngayDang.val();
-            ngayDang.parent().find('.text-danger').remove();
-            if (!ngayDangInput) {
-                ngayDang.parent().append('<div class="text-danger fw-bold">Ngày đăng không được bỏ trống</div>');
-                isValid = false;
-            } else if (new Date(ngayDangInput) > new Date()) {
-                ngayDang.parent().append(
-                    '<div class="text-danger fw-bold">Ngày đăng không vượt quá ngày hiện tại</div>');
-                isValid = false;
+            function ngayDang() {
+                const ngayDang = $('#ngay-dang');
+                let ngayDangInput = ngayDang.val();
+                ngayDang.parent().find('.text-danger').remove();
+                if (!ngayDangInput) {
+                    ngayDang.parent().append('<div class="text-danger fw-bold">Ngày đăng không được bỏ trống</div>');
+                    return false;
+                } else if (new Date(ngayDangInput) > new Date()) {
+                    ngayDang.parent().append(
+                        '<div class="text-danger fw-bold">Ngày đăng không vượt quá ngày hiện tại</div>');
+                    return false;
+                }
+                return true;
             }
 
-            // Kiểm tra tên nhân viên
-            const tenDangNhapNV = $('select[name="TenDangNhapNV"]');
-            let tenDangNhapNVInput = tenDangNhapNV.val();
-            tenDangNhapNV.parent().find('.text-danger').remove();
-            if (!tenDangNhapNVInput) {
-                tenDangNhapNV.parent().append(
-                    '<div class="text-danger fw-bold">Tên nhân viên không được bỏ trống</div>');
-                isValid = false;
+            function tenDangNhapNV() {
+                const tenDangNhapNV = $('select[name="TenDangNhapNV"]');
+                let tenDangNhapNVInput = tenDangNhapNV.val();
+                tenDangNhapNV.parent().find('.text-danger').remove();
+                if (!tenDangNhapNVInput) {
+                    tenDangNhapNV.parent().append(
+                        '<div class="text-danger fw-bold">Tên nhân viên không được bỏ trống</div>');
+                    return false;
+                }
+                return true;
             }
 
-            // Kiểm tra ảnh
-            const image = $('#image');
-            let imageInput = image[0];
-            image.parent().find('div.text-danger').remove();
+            function image() {
+                const image = $('#image');
+                let imageInput = image[0];
+                image.parent().find('div.text-danger').remove();
 
-            if (!imageInput.files.length) {
-                isValid = true;
-            } else if (imageInput.files[0].size > 20 * 1024 * 1024) {
-                image.parent().append('<div class="text-danger fw-bold">Ảnh không vượt quá 20MB</div>');
-                isValid = false;
-            } else {
-                const file = imageInput.files[0];
-                const fileType = file['type'];
-                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-                if (!validImageTypes.includes(fileType)) {
-                    image.parent().append(
-                        '<div class="text-danger fw-bold">Ảnh phải có định dạng JPG, PNG, GIF</div>');
+                if (!imageInput.files.length) {
+                    return true;
+                } else if (imageInput.files[0].size > 20 * 1024 * 1024) {
+                    image.parent().append('<div class="text-danger fw-bold">Ảnh không vượt quá 20MB</div>');
+                    return false;
+                } else {
+                    const file = imageInput.files[0];
+                    const fileType = file['type'];
+                    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                    if (!validImageTypes.includes(fileType)) {
+                        image.parent().append(
+                            '<div class="text-danger fw-bold">Ảnh phải có định dạng JPG, PNG, GIF</div>');
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function noiDung() {
+                const noiDung = $('#Noi-Dung');
+                let noiDungInput = noiDung.val();
+                noiDung.parent().find('div.text-danger').remove();
+                if (!noiDungInput) {
+                    noiDung.parent().append(
+                        '<div class="text-danger fw-bold">Nội dung tin tức không được bỏ trống</div>');
+                    return false;
+                } else if (noiDungInput.length < 50) {
+                    noiDung.parent().append(
+                        '<div class="text-danger fw-bold">Nội dung tin tức tối thiểu 50 ký tự</div>');
+                    return false;
+                } else if (!/^[a-zA-Z0-9 ]+$/.test(noiDungInput)) {
+                    noiDung.parent().append(
+                        '<div class="text-danger fw-bold">Nội dung tin tức không chứa ký tự đặc biệt</div>');
+                    return false;
+                }
+                return true;
+            }
+
+            $('#form').submit(function(e) {
+                e.preventDefault();
+                let isValid = true;
+                if (!tenSuKien()) {
                     isValid = false;
                 }
-            }
-
-            // Kiểm tra nội dung
-            const noiDung = $('#Noi-Dung');
-            let noiDungInput = noiDung.val();
-            noiDung.parent().find('div.text-danger').remove();
-            if (!noiDungInput) {
-                noiDung.parent().append(
-                    '<div class="text-danger fw-bold">Nội dung tin tức không được bỏ trống</div>');
-                isValid = false;
-            } else if (noiDungInput.length < 50) {
-                noiDung.parent().append(
-                    '<div class="text-danger fw-bold">Nội dung tin tức tối thiểu 50 ký tự</div>');
-                isValid = false;
-            } else if (!/^[a-zA-Z0-9 ]+$/.test(noiDungInput)) {
-                noiDung.parent().append(
-                    '<div class="text-danger fw-bold">Nội dung tin tức không chứa ký tự đặc biệt</div>');
-                isValid = false;
-            }
-
-            if (isValid) {
-                $('#form').submit();
-            }
+                if (!loaiTinTuc()) {
+                    isValid = false;
+                }
+                if (!tomTat()) {
+                    isValid = false;
+                }
+                if (!ngayDang()) {
+                    isValid = false;
+                }
+                if (!tenDangNhapNV()) {
+                    isValid = false;
+                }
+                if (!image()) {
+                    isValid = false;
+                }
+                if (!noiDung()) {
+                    isValid = false;
+                }
+                if (isValid) {
+                    $('#form').off('submit').submit();
+                }
+            });
         });
+
+        // $(document).on('click', '#btn_submit', function(e) {
+        //     e.preventDefault();
+
+
+            // let isValid = true;
+
+            // // Kiểm tra tên sự kiện
+            // const tenSuKien = $('#ten-su-kien');
+            // let tenSuKienInput = tenSuKien.val();
+            // tenSuKien.parent().find('.text-danger').remove();
+            // if (!tenSuKienInput) {
+            //     tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không được bỏ trống</div>');
+            //     isValid = false;
+            // } else if (tenSuKienInput.length > 255) {
+            //     tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không quá 255 ký tự</div>');
+            //     isValid = false;
+            // } else if (!/^[a-zA-Z0-9 ]+$/.test(tenSuKienInput)) {
+            //     tenSuKien.parent().append(
+            //         '<div class="text-danger fw-bold">Tên tin tức không chứa ký tự đặc biệt</div>');
+            //     isValid = false;
+            // }
+
+            // // Kiểm tra loại tin tức
+            // const loaiTinTuc = $('select[name="MaLoaiTinTuc"]');
+            // let loaiTinTucInput = loaiTinTuc.val();
+            // loaiTinTuc.parent().find('.text-danger').remove();
+            // if (!loaiTinTucInput) {
+            //     loaiTinTuc.parent().append(
+            //         '<div class="text-danger fw-bold">Loại tin tức không được để trống</div>');
+            //     isValid = false;
+            // }
+
+            // // Kiểm tra tóm tắt
+            // const tomTat = $('#tom-tat');
+            // let tomTatInput = tomTat.val();
+            // tomTat.parent().find('.text-danger').remove();
+            // if (!tomTatInput) {
+            //     tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không được bỏ trống</div>');
+            //     isValid = false;
+            // } else if (tomTatInput.length > 500) {
+            //     tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không quá 500 ký tự</div>');
+            //     isValid = false;
+            // } else if (!/^[a-zA-Z0-9 ]+$/.test(tomTatInput)) {
+            //     tomTat.parent().append('<div class="text-danger fw-bold">Tóm tắt không chứa ký tự đặc biệt</div>');
+            //     isValid = false;
+            // }
+
+            // // Kiểm tra ngày đăng
+            // const ngayDang = $('#ngay-dang');
+            // let ngayDangInput = ngayDang.val();
+            // ngayDang.parent().find('.text-danger').remove();
+            // if (!ngayDangInput) {
+            //     ngayDang.parent().append('<div class="text-danger fw-bold">Ngày đăng không được bỏ trống</div>');
+            //     isValid = false;
+            // } else if (new Date(ngayDangInput) > new Date()) {
+            //     ngayDang.parent().append(
+            //         '<div class="text-danger fw-bold">Ngày đăng không vượt quá ngày hiện tại</div>');
+            //     isValid = false;
+            // }
+
+            // // Kiểm tra tên nhân viên
+            // const tenDangNhapNV = $('select[name="TenDangNhapNV"]');
+            // let tenDangNhapNVInput = tenDangNhapNV.val();
+            // tenDangNhapNV.parent().find('.text-danger').remove();
+            // if (!tenDangNhapNVInput) {
+            //     tenDangNhapNV.parent().append(
+            //         '<div class="text-danger fw-bold">Tên nhân viên không được bỏ trống</div>');
+            //     isValid = false;
+            // }
+
+            // // Kiểm tra ảnh
+            // const image = $('#image');
+            // let imageInput = image[0];
+            // image.parent().find('div.text-danger').remove();
+
+            // if (!imageInput.files.length) {
+            //     isValid = true;
+            // } else if (imageInput.files[0].size > 20 * 1024 * 1024) {
+            //     image.parent().append('<div class="text-danger fw-bold">Ảnh không vượt quá 20MB</div>');
+            //     isValid = false;
+            // } else {
+            //     const file = imageInput.files[0];
+            //     const fileType = file['type'];
+            //     const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+            //     if (!validImageTypes.includes(fileType)) {
+            //         image.parent().append(
+            //             '<div class="text-danger fw-bold">Ảnh phải có định dạng JPG, PNG, GIF</div>');
+            //         isValid = false;
+            //     }
+            // }
+
+            // // Kiểm tra nội dung
+            // const noiDung = $('#Noi-Dung');
+            // let noiDungInput = noiDung.val();
+            // noiDung.parent().find('div.text-danger').remove();
+            // if (!noiDungInput) {
+            //     noiDung.parent().append(
+            //         '<div class="text-danger fw-bold">Nội dung tin tức không được bỏ trống</div>');
+            //     isValid = false;
+            // } else if (noiDungInput.length < 50) {
+            //     noiDung.parent().append(
+            //         '<div class="text-danger fw-bold">Nội dung tin tức tối thiểu 50 ký tự</div>');
+            //     isValid = false;
+            // } else if (!/^[a-zA-Z0-9 ]+$/.test(noiDungInput)) {
+            //     noiDung.parent().append(
+            //         '<div class="text-danger fw-bold">Nội dung tin tức không chứa ký tự đặc biệt</div>');
+            //     isValid = false;
+            // }
+
+        // });
     </script>
 @endsection
