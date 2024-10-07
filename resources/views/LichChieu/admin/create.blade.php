@@ -142,67 +142,40 @@
 @endsection
 @section('script')
     <script>
-        {{-- function checkAndSubmitForm() {
-        var selectValue = document.getElementById('select').value;
-        var dateInputValue = document.getElementById('date-input').value;
+    //     {{-- function checkAndSubmitForm() {
+    //     var selectValue = document.getElementById('select').value;
+    //     var dateInputValue = document.getElementById('date-input').value;
 
-        if (selectValue !== '' && dateInputValue !== '') {
-            document.getElementById('hidden-form').submit();
-        }
-    }
-    $(document).ready(function() {
-        function onFormSubmit(e){
-            e.preventDefault(); // Ngăn chặn việc gửi form thông qua phương thức mặc định
+    //     if (selectValue !== '' && dateInputValue !== '') {
+    //         document.getElementById('hidden-form').submit();
+    //     }
+    // }
+    // $(document).ready(function() {
+    //     function onFormSubmit(e){
+    //         e.preventDefault(); // Ngăn chặn việc gửi form thông qua phương thức mặc định
 
-            var formData = $(this).serialize(); // Lấy dữ liệu form
+    //         var formData = $(this).serialize(); // Lấy dữ liệu form
 
-            $.ajax({
-                url: '{{ route("lichchieus.store") }}', // Đường dẫn route đã được định nghĩa
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    // Xử lý phản hồi từ server sau khi lưu form thành công
-                    console.log(response);
-                },
-                error: function(xhr) {
-                    // Xử lý lỗi trong trường hợp request không thành công
-                    console.log(xhr.responseText);
-                }
-            });
-        }
-    }); --}}
+    //         $.ajax({
+    //             url: '{{ route("lichchieus.store") }}', // Đường dẫn route đã được định nghĩa
+    //             type: 'POST',
+    //             data: formData,
+    //             success: function(response) {
+    //                 // Xử lý phản hồi từ server sau khi lưu form thành công
+    //                 console.log(response);
+    //             },
+    //             error: function(xhr) {
+    //                 // Xử lý lỗi trong trường hợp request không thành công
+    //                 console.log(xhr.responseText);
+    //             }
+    //         });
+    //     }
+    // }); --}}
     </script>
 
     <script>
-        $(document).on('click', '#btn_submit', function(e) {
-            e.preventDefault();
-            let isValid = true;
+        $(document).ready(function() {
 
-            // Kiểm tra thời gian
-            const gioChieu = $('#GioChieu');
-            let gioChieuInput = gioChieu.val();
-            gioChieu.parent().find('.text-danger').remove();
-            const gioChieuArr = [];
-
-            if (!gioChieuInput) {
-                gioChieu.parent().append('<div class="text-danger fw-bold">Giờ chiếu không được bỏ trống.</div>');
-                isValid = false;
-            } else {
-                gioChieuInput = gioChieuInput.split(':');
-                const gioChieuHour = parseInt(gioChieuInput[0], 10);
-                const gioChieuMinute = parseInt(gioChieuInput[1], 10);
-
-                if (gioChieuHour < 8 || gioChieuHour > 22 || (gioChieuHour === 22 && gioChieuMinute > 0)) {
-                    gioChieu.parent().append(
-                        '<div class="text-danger fw-bold">Giờ chiếu phải nằm trong khoảng hoạt động của rạp  từ 8:00 đến 23:00.</div>'
-                    );
-                    isValid = false;
-                } else if (isDuplicate(gioChieuArr)) {
-                    isValid = false;
-                }
-            }
-
-            // Hàm kiểm tra trùng lặp
             function isDuplicate(arr) {
                 const isDuplicate = arr.some((item, idx) => arr.indexOf(item) !== idx);
                 if (isDuplicate) {
@@ -213,19 +186,113 @@
                 return isDuplicate;
             }
 
-            // Kiểm tra tên phim
-            const maPhim = $('#MaPhim');
-            const maPhimValue = maPhim.val();
-            maPhim.parent().find('.text-danger').remove();
+            function gioChieu() {
+                const gioChieu = $('#GioChieu');
+                let gioChieuInput = gioChieu.val();
+                gioChieu.parent().find('.text-danger').remove();
 
-            if (!maPhimValue) {
-                maPhim.parent().append('<div class="text-danger fw-bold">Tên phim không được bỏ trống.</div>');
-                isValid = false;
+                if (!gioChieuInput) {
+                    gioChieu.parent().append('<div class="text-danger fw-bold">Giờ chiếu không được bỏ trống.</div>');
+                    return false;
+                } else {
+                    gioChieuInput = gioChieuInput.split(':');
+                    const gioChieuHour = parseInt(gioChieuInput[0], 10);
+                    const gioChieuMinute = parseInt(gioChieuInput[1], 10);
+
+                    if (gioChieuHour < 8 || gioChieuHour > 22 || (gioChieuHour === 22 && gioChieuMinute > 0)) {
+                        gioChieu.parent().append(
+                            '<div class="text-danger fw-bold">Giờ chiếu phải nằm trong khoảng hoạt động của rạp  từ 8:00 đến 23:00.</div>'
+                        );
+                        return false;
+                    } else if (isDuplicate(gioChieuArr)) {
+                        return false;
+                    }
+                }
             }
 
-            if (isValid) {
-                $('#storeForm').submit();
+            function maPhim() {
+                const maPhim = $('#MaPhim');
+                const maPhimValue = maPhim.val();
+                maPhim.parent().find('.text-danger').remove();
+
+                if (!maPhimValue) {
+                    maPhim.parent().append('<div class="text-danger fw-bold">Tên phim không được bỏ trống.</div>');
+                    return false;
+                }
             }
-        });
+
+            $(document).on('click', '#btn_submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+
+                if (!gioChieu()) {
+                    isValid = false;
+                }
+
+                if (!maPhim()) {
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    $('#storeForm').submit();
+                }
+            });
+
+
+        })
+
+        // $(document).on('click', '#btn_submit', function(e) {
+        //     e.preventDefault();
+        //     let isValid = true;
+
+        //     // Kiểm tra thời gian
+        //     const gioChieu = $('#GioChieu');
+        //     let gioChieuInput = gioChieu.val();
+        //     gioChieu.parent().find('.text-danger').remove();
+        //     const gioChieuArr = [];
+
+        //     if (!gioChieuInput) {
+        //         gioChieu.parent().append('<div class="text-danger fw-bold">Giờ chiếu không được bỏ trống.</div>');
+        //         isValid = false;
+        //     } else {
+        //         gioChieuInput = gioChieuInput.split(':');
+        //         const gioChieuHour = parseInt(gioChieuInput[0], 10);
+        //         const gioChieuMinute = parseInt(gioChieuInput[1], 10);
+
+        //         if (gioChieuHour < 8 || gioChieuHour > 22 || (gioChieuHour === 22 && gioChieuMinute > 0)) {
+        //             gioChieu.parent().append(
+        //                 '<div class="text-danger fw-bold">Giờ chiếu phải nằm trong khoảng hoạt động của rạp  từ 8:00 đến 23:00.</div>'
+        //             );
+        //             isValid = false;
+        //         } else if (isDuplicate(gioChieuArr)) {
+        //             isValid = false;
+        //         }
+        //     }
+
+            // Hàm kiểm tra trùng lặp
+            // function isDuplicate(arr) {
+            //     const isDuplicate = arr.some((item, idx) => arr.indexOf(item) !== idx);
+            //     if (isDuplicate) {
+            //         gioChieu.parent().append(
+            //             '<div class="text-danger fw-bold">Giờ chiếu không được trùng lặp với giờ chiếu của cùng một phim trong cùng một phòng chiếu vào ngày đó.</div>'
+            //         );
+            //     }
+            //     return isDuplicate;
+            // }
+
+        //     // Kiểm tra tên phim
+        //     const maPhim = $('#MaPhim');
+        //     const maPhimValue = maPhim.val();
+        //     maPhim.parent().find('.text-danger').remove();
+
+        //     if (!maPhimValue) {
+        //         maPhim.parent().append('<div class="text-danger fw-bold">Tên phim không được bỏ trống.</div>');
+        //         isValid = false;
+        //     }
+
+        //     if (isValid) {
+        //         $('#storeForm').submit();
+        //     }
+        // });
     </script>
 @endsection
