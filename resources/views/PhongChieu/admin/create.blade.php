@@ -113,7 +113,8 @@
                         '<div class="text-danger fw-bold">Tên phòng chỉ gồm chữ cái, số và khoảng trắng</div>'
                     );
                     return = false;
-                } else {
+                }
+                else {
                     if (isRoomDuplicate(roomNameVal)) {
                         roomName.parent().append('<div class="text-danger fw-bold">Tên phòng đã tồn tại</div>');
                         return = false;
@@ -212,7 +213,7 @@
                     isvalid = false;
                 }
                 if (isvalid) {
-                    $('#form').submit();
+                    $('#form').off('submit').submit();
                 }
             });
         });
