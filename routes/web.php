@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Route;
 
 //Route cho branch NgocHuy_B
 Route::resource('phongchieus', PhongChieuController::class);
+Route::post('/phongchieus/check-duplicate', [PhongChieuController::class, 'checkDuplicate'])->name('phongchieus.checkDuplicate');
 Route::resource('tintucs', TinTucController::class);
 Route::resource('vouchers', VoucherController::class);
 Route::resource('nhanviens', NhanVienController::class);
@@ -86,11 +87,12 @@ Route::post('/', [KhachHangController::class, 'update'])->name('khachhangs.updat
 Route::post('/vnpay_payment', [VnPayController::class, 'vnpay_payment'])->name('vnpay_payment');
 
 
-Route::post('/searchnv', [NhanVienController::class, 'search'])->name('nhanviens.search')->middleware('admin');;
+Route::post('/searchnv', [NhanVienController::class, 'search'])->name('nhanviens.search')->middleware('admin');
 // Route::resource('nhanviens', NhanVienController::class)->middleware('admin');
 // hết phần của Phong
 // module A
 Route::resource('phims', PhimController::class);
+Route::post('/phims/check-duplicate', [PhimController::class, 'checkDuplicate'])->name('phims.checkDuplicate');
 Route::resource('theloais', TheLoaiController::class);
 Route::resource('nhacungcaps', NhaCungCapController::class);
 // hết module A

@@ -47,22 +47,22 @@ class PhongChieuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'TenPhong' => ['required', 'unique:phong_chieus,TenPhong', 'max:20', 'regex:/^[A-Za-z0-9\s]+$/'],
+            'TenPhong' => ['required', 'unique:phong_chieus,TenPhong', 'max:20', 'regex:/^[\p{L}\p{N}\s]+$/u'],
             'SoLuongGhe' => ['required', 'numeric', 'max:50', 'regex:/^[1-9][0-9]*$/'],
             'TinhTrang' => ['required'],
             'LoaiPhong' => ['required'],
         ], [
             // 'SoLuongGhe.min' => 'Thêm không thành công. Vui lòng nhập đầy đủ thông tin',
-            'TenPhong.required' => 'Tên phòng không được bỏ trống',
-            'TenPhong.unique' => 'Phòng đã tồn tại',
-            'TenPhong.max' => 'Tên phòng không được vượt quá 20 ký tự',
-            'TenPhong.regex' => 'Tên phòng chỉ gồm chữ cái, số và khoảng trắng',
-            'SoLuongGhe.max' => 'Số lượng ghế tối đa là 50',
-            'SoLuongGhe.required' => 'Số lượng ghế không được bỏ trống',
-            'SoLuongGhe.numeric' => 'Số lượng ghế phải là số nguyên lớn hơn 0',
-            'SoLuongGhe.regex' => 'Số lượng ghế chỉ được phép là số nguyên lớn hơn 0',
-            'TinhTrang.required' => 'Vui lòng chọn tình trạng của phòng',
-            'LoaiPhong.required' => 'Loại phòng không được bỏ trống',
+            'TenPhong.required' => '',
+            'TenPhong.unique' => '',
+            'TenPhong.max' => '',
+            'TenPhong.regex' => '',
+            'SoLuongGhe.max' => '',
+            'SoLuongGhe.required' => '',
+            'SoLuongGhe.numeric' => '',
+            'SoLuongGhe.regex' => '',
+            'TinhTrang.required' => '',
+            'LoaiPhong.required' => '',
         ]);
 
         if ($validator->fails()) {
@@ -72,16 +72,28 @@ class PhongChieuController extends Controller
         //     return redirect()->back()->with('mess_fail', 'Vui lòng nhập đầy đủ thông tin');
         // }
 
-
-        PhongChieu::create([
-            'TenPhong' => $request->input('TenPhong'),
-            'SoLuongGhe' => $request->input('SoLuongGhe'),
-            'TinhTrang' => $request->input('TinhTrang'),
-            'MaLoaiPhong' => $request->input('LoaiPhong'),
-        ]);
+        $phongChieu = new PhongChieu();
+        $phongChieu->TenPhong = $request->input('TenPhong');
+        $phongChieu->SoLuongGhe = $request->input('SoLuongGhe');
+        $phongChieu->TinhTrang = $request->input('TinhTrang');
+        $phongChieu->MaLoaiPhong = $request->input('LoaiPhong');
+        $phongChieu->save();
+        // PhongChieu::create([
+        //     'TenPhong' => $request->input('TenPhong'),
+        //     'SoLuongGhe' => $request->input('SoLuongGhe'),
+        //     'TinhTrang' => $request->input('TinhTrang'),
+        //     'MaLoaiPhong' => $request->input('LoaiPhong'),
+        // ]);
         return redirect()->route('phongchieus.index')->with('mess_success', 'Thêm phòng thành công');
     }
 
+    function checkDuplicate(Request $request)
+    {
+        $TenPhong = $request->input('TenPhong');
+        $isDuplicate = PhongChieu::where('TenPhong', $TenPhong)->exists();
+
+        return response()->json(['isDublicate' => $isDuplicate]);
+    }
 
     public function show(PhongChieu $phongChieu)
     {

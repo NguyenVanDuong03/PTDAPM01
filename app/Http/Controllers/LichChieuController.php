@@ -135,17 +135,17 @@ class LichChieuController extends Controller
                 // kiểm tra xem phim có được chọn hay không, phim được chọn thì mới thêm
                 // nếu value của phim là -1 thì là chưa được chọn
 
-                    if($request->input('MaPhim')[$key] != -1){
+                    // if($request->input('MaPhim')[$key] != -1){
                         LichChieu::create([
                             'MaPhim' => $request->input('MaPhim')[$key],
                             'MaPhong' => $MaPhong,
                             'NgayChieu' => $NgayChieu,
                             'GioChieu' => $request->input('GioChieu')[$key]
                         ]);
-                    }
+                    // }
                 }
             }
-            return redirect()->route('lichchieus.index')->with('mes', 'Đã lưu thay dổi');
+            return redirect()->route('lichchieus.index')->with('mes', 'Thêm lịch chiếu thành công');
         }else{
             echo 'ngay chieu null';
         }

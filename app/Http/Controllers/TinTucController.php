@@ -56,26 +56,29 @@ class TinTucController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'TenSuKien' => ['required', 'max: 40', 'regex:/^[\pL\s\d]+$/u'],
+            'TenSuKien' => ['required', 'max: 255', 'regex:/^[\p{L}\p{N}\s]+$/u'],
             'MaLoaiTinTuc' => ['required'],
-            'TomTat' => ['required', 'max: 300'],
-            'NgayDang' => ['required'],
-            'TenDangNhapNV' => ['required', Rule::exists('nhan_viens', 'TenDangNhapNV')],
-            'NoiDung' => ['required', 'max: 1000'],
-            'Anh' => ['required', 'max:5120'],
+            'TomTat' => ['required', 'max: 500', 'regex:/^[\p{L}\p{N}\s]+$/u'],
+            'NgayDang' => ['required', 'date', 'before_or_equal:today'],
+            'TenDangNhapNV' => ['required'],
+            'Anh' => ['max:20480', 'mimes:jpeg,jpg,png,gif'],
+            'NoiDung' => ['required', 'min:50', 'regex:/^[\p{L}\p{N}\s]+$/u'],
         ], [
-            'TenSuKien.required' => 'Tên sự kiện không được bỏ trống',
-            'TenSuKien.max' => 'Tên sự kiện không quá 40 từ',
-            'TenSuKien.regex' => 'Vui lòng kiểm tra lại thông tin',
-            'MaLoaiTinTuc.required' => 'Loại tin tức không được bỏ trống',
-            'TomTat.required' => 'Tóm tắt không được bỏ trống',
-            'TomTat.max' => 'Tóm tắt không quá 300 ký tự',
-            'NgayDang.required' => 'Ngày đăng không được bỏ trống',
-            'NoiDung.required' => 'Nội dung không được bỏ trống',
-            'NoiDung.max' => 'Nội dung không quá 1000 ký tự',
-            'Anh.required' => 'Ảnh tin tức không được bỏ trống',
-            // 'TenDangNhapNV.exists' => 'Tên đăng nhập nhân viên không tồn tại',
-            'TenDangNhapNV.required' => 'Tên đăng nhập nhân viên không được bỏ trống',
+            'TenSuKien.required' => '',
+            'TenSuKien.max' => '',
+            'TenSuKien.regex' => '',
+            'MaLoaiTinTuc.required' => '',
+            'TomTat.required' => '',
+            'TomTat.max' => '',
+            'TomTat.regex' => '',
+            'NgayDang.required' => '',
+            'NgayDang.date' => '',
+            'NgayDang.before_or_equal' => '',
+            'NoiDung.required' => '',
+            'NoiDung.min' => '',
+            'Anh.max' => '',
+            'Anh.mimes' => '',
+            'TenDangNhapNV.required' => '',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -94,10 +97,12 @@ class TinTucController extends Controller
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('Anh'), $imageName);
             $tintuc->Anh = 'Anh/' . $imageName;
+        } else {
+            $tintuc->Anh = 'Anh/default-image.jpg';
         }
         $tintuc->save();
 
-        return redirect()->route('tintucs.index')->with('mess_success', 'Thêm thành công');
+        return redirect()->route('tintucs.index')->with('mess_success', 'Thêm tin tức thành công');
     }
 
 
@@ -151,7 +156,7 @@ class TinTucController extends Controller
     public function update(Request $request, TinTuc $tintuc)
     {
         $validator = Validator::make($request->all(), [
-            'TenSuKien' => ['required', 'max: 40', 'regex:/^[\pL\s\d]+$/u'],
+            'TenSuKien' => ['required', 'max: 40', 'regex:/^[\p{L}\p{N}\s]+$/u'],
             'TomTat' => ['required', 'max: 300'],
             'NgayDang' => ['required'],
             'TenDangNhapNV' => ['required', 'regex:/^[\pL\s\d.@]+$/u', Rule::exists('nhan_viens', 'TenDangNhapNV')],
