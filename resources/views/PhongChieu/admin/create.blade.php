@@ -94,36 +94,6 @@
     <script>
         $(document).ready(function() {
 
-            // Kiểm tra tên phòng
-            fucntion roomName() {
-                const roomName = $('#TenPhong');
-                let roomNameVal = roomName.val();
-                roomName.parent().find('.text-danger').remove();
-
-                if (!roomNameVal) {
-                    roomName.parent().append(
-                        '<div class="text-danger fw-bold">Tên phòng không được bỏ trống</div>');
-                    return = false;
-                } else if (roomNameVal.length > 20) {
-                    roomName.parent().append(
-                        '<div class="text-danger fw-bold">Tên phòng không được vượt quá 20 ký tự</div>');
-                    return = false;
-                } else if (!/^[\p{L}\p{N}\s]+$/u.test(roomNameVal)) {
-                    roomName.parent().append(
-                        '<div class="text-danger fw-bold">Tên phòng chỉ gồm chữ cái, số và khoảng trắng</div>'
-                    );
-                    return = false;
-                }
-                else {
-                    if (isRoomDuplicate(roomNameVal)) {
-                        roomName.parent().append('<div class="text-danger fw-bold">Tên phòng đã tồn tại</div>');
-                        return = false;
-                    }
-                }
-                return true;
-            }
-
-
             function isRoomDuplicate(roomNameVal) {
                 let isDuplicate = false;
                 $.ajax({
@@ -141,8 +111,32 @@
                 return isDuplicate;
             }
 
-            // Kiểm tra số lượng ghế
-            function soLuongGhe() {
+            function roomName() {
+                const roomName = $('#TenPhong');
+                let roomNameVal = roomName.val();
+                roomName.parent().find('.text-danger').remove();
+
+                if (!roomNameVal) {
+                    roomName.parent().append('<div class="text-danger fw-bold">Tên phòng không được bỏ trống</div>');
+                    return false;
+                } else if (!/^[\p{L}\p{N}\s]+$/u.test(roomNameVal)) {
+                    roomName.parent().append(
+                        '<div class="text-danger fw-bold">Tên phòng chỉ gồm chữ cái, số và khoảng trắng</div>');
+                    return false;
+                } else if (roomNameVal.length > 20) {
+                    roomName.parent().append(
+                        '<div class="text-danger fw-bold">Tên phòng không được vượt quá 20 ký tự</div>');
+                    return false;
+                } else {
+                    if (isRoomDuplicate(roomNameVal)) {
+                        roomName.parent().append('<div class="text-danger fw-bold">Tên phòng đã tồn tại</div>');
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function seatNumber() {
                 const soLuongGhe = $('#so-luong-ghe');
                 let soLuongGheVal = soLuongGhe.val();
                 soLuongGhe.parent().find('.text-danger').remove();
@@ -150,73 +144,70 @@
                 if (!soLuongGheVal) {
                     soLuongGhe.parent().append(
                         '<div class="text-danger fw-bold">Số lượng ghế không được bỏ trống</div>');
-                    return = false;
+                    return false;
                 } else if (!/^[1-9]\d*$/.test(soLuongGheVal)) {
                     soLuongGhe.parent().append(
-                        '<div class="text-danger fw-bold">Số lượng ghế chỉ được phép là số nguyên lớn hơn 0</div>'
-                        );
-                    return = false;
+                        '<div class="text-danger fw-bold">Số lượng ghế chỉ được phép là số nguyên lớn hơn 0</div>');
+                    return false;
                 } else if (soLuongGheVal < 1) {
                     soLuongGhe.parent().append(
                         '<div class="text-danger fw-bold">Số lượng ghế phải là số nguyên lớn hơn 0</div>');
-                    return = false;
+                    return false;
                 } else if (soLuongGheVal > 50) {
                     soLuongGhe.parent().append('<div class="text-danger fw-bold">Số lượng ghế tối đa là 50</div>');
-                    return = false;
+                    return false;
                 }
                 return true;
             }
 
-            // Kiểm tra tình trạng
-            function tinhTrang() {
-                const tinhTrang = $('select[name="TinhTrang"]');
+            function status() {
+                const tinhTrang = $('#tinh-trang');
                 let tinhTrangVal = tinhTrang.val();
                 tinhTrang.parent().find('.text-danger').remove();
 
                 if (!tinhTrangVal) {
                     tinhTrang.parent().append(
                         '<div class="text-danger fw-bold">Vui lòng chọn tình trạng của phòng</div>');
-                    return = false;
+                    return false;
                 }
                 return true;
             }
 
-            // Kiểm tra loại phòng
-            function loaiPhong() {
-                const loaiPhong = $('select[name="LoaiPhong"]');
+            function roomType() {
+                const loaiPhong = $('#LoaiPhong');
                 let loaiPhongVal = loaiPhong.val();
                 loaiPhong.parent().find('.text-danger').remove();
 
                 if (!loaiPhongVal) {
-                    loaiPhong.parent().append(
-                        '<div class="text-danger fw-bold">Loại phòng không được bỏ trống</div>');
-                    return = false;
+                    loaiPhong.parent().append('<div class="text-danger fw-bold">Loại phòng không được bỏ trống</div>');
+                    return false;
                 }
                 return true;
             }
 
-            // Kiểm tra dữ liệu trước khi submit
             $('#form').submit(function(e) {
                 e.preventDefault();
                 let isvalid = true;
 
+                // kiểm tra tên phòng
                 if (!roomName()) {
                     isvalid = false;
                 }
-                if (!soLuongGhe()) {
+                if (!seatNumber()) {
                     isvalid = false;
                 }
-                if (!tinhTrang()) {
+                if (!status()) {
                     isvalid = false;
                 }
-                if (!loaiPhong()) {
+                if (!roomType()) {
                     isvalid = false;
                 }
-                if (isvalid) {
-                    $('#form').off('submit').submit();
+                if(isvalid) {
+                    $('#form').unbind('submit').submit();
                 }
             });
-        });
+
+        })
 
         // $(document).on('click', '#btn_submit', function(e) {
         //     e.preventDefault();

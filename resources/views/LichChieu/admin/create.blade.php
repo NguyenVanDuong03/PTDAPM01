@@ -64,26 +64,26 @@
                             </div>
                         @endforeach
                         {{-- @for ($i = 0; $i < 2 - count($infoLichChieu->LichChieus); $i++) --}}
-                            <input type="hidden" name="MaLichChieu[]" value="-1" id="">
-                            <div class="col-3 flex-column d-flex">
-                                <label for="ten-do-an" class="gap-2">Thời gian*</label>
-                                <input id="GioChieu" name="GioChieu[]" type="time"
-                                    class="py-1 px-2 rounded border border-1" placeholder="Chọn thời gian chiếu phim">
-                                @error('GioChieu')
-                                    <div class="text-danger fw-bold">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="flex-column d-flex gap-2 col-3">
-                                <label for="the-loai-do-an">Tên phim*</label>
-                                <select id="MaPhim" class="form-select form-select-sm" aria-label="Small select example"
-                                    name="MaPhim[]">
-                                    <!-- <option selected>Tên thể loại đồ ăn</option> -->
-                                    <option value="-1" disabled selected>Lựa chọn</option>
-                                    @foreach ($phims as $item)
-                                        <option value="{{ $item->MaPhim }}">{{ $item->TenPhim }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <input type="hidden" name="MaLichChieu[]" value="-1" id="">
+                        <div class="col-3 flex-column d-flex">
+                            <label for="ten-do-an" class="gap-2">Thời gian*</label>
+                            <input id="GioChieu" name="GioChieu[]" type="time" class="py-1 px-2 rounded border border-1"
+                                placeholder="Chọn thời gian chiếu phim">
+                            @error('GioChieu')
+                                <div class="text-danger fw-bold">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="flex-column d-flex gap-2 col-3">
+                            <label for="the-loai-do-an">Tên phim*</label>
+                            <select id="MaPhim" class="form-select form-select-sm" aria-label="Small select example"
+                                name="MaPhim[]">
+                                <!-- <option selected>Tên thể loại đồ ăn</option> -->
+                                <option value="-1" disabled selected>Lựa chọn</option>
+                                @foreach ($phims as $item)
+                                    <option value="{{ $item->MaPhim }}">{{ $item->TenPhim }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         {{-- @endfor --}}
                     </div>
                 @else
@@ -142,7 +142,7 @@
 @endsection
 @section('script')
     <script>
-    //     {{-- function checkAndSubmitForm() {
+        //     {{-- function checkAndSubmitForm() {
     //     var selectValue = document.getElementById('select').value;
     //     var dateInputValue = document.getElementById('date-input').value;
 
@@ -189,10 +189,12 @@
             function gioChieu() {
                 const gioChieu = $('#GioChieu');
                 let gioChieuInput = gioChieu.val();
+                const gioChieuArr = [];
                 gioChieu.parent().find('.text-danger').remove();
 
                 if (!gioChieuInput) {
-                    gioChieu.parent().append('<div class="text-danger fw-bold">Giờ chiếu không được bỏ trống.</div>');
+                    gioChieu.parent().append(
+                        '<div class="text-danger fw-bold">Giờ chiếu không được bỏ trống.</div>');
                     return false;
                 } else {
                     gioChieuInput = gioChieuInput.split(':');
@@ -208,6 +210,7 @@
                         return false;
                     }
                 }
+                return true;
             }
 
             function maPhim() {
@@ -219,6 +222,7 @@
                     maPhim.parent().append('<div class="text-danger fw-bold">Tên phim không được bỏ trống.</div>');
                     return false;
                 }
+                return true;
             }
 
             $(document).on('click', '#btn_submit', function(e) {
@@ -269,16 +273,16 @@
         //         }
         //     }
 
-            // Hàm kiểm tra trùng lặp
-            // function isDuplicate(arr) {
-            //     const isDuplicate = arr.some((item, idx) => arr.indexOf(item) !== idx);
-            //     if (isDuplicate) {
-            //         gioChieu.parent().append(
-            //             '<div class="text-danger fw-bold">Giờ chiếu không được trùng lặp với giờ chiếu của cùng một phim trong cùng một phòng chiếu vào ngày đó.</div>'
-            //         );
-            //     }
-            //     return isDuplicate;
-            // }
+        // Hàm kiểm tra trùng lặp
+        // function isDuplicate(arr) {
+        //     const isDuplicate = arr.some((item, idx) => arr.indexOf(item) !== idx);
+        //     if (isDuplicate) {
+        //         gioChieu.parent().append(
+        //             '<div class="text-danger fw-bold">Giờ chiếu không được trùng lặp với giờ chiếu của cùng một phim trong cùng một phòng chiếu vào ngày đó.</div>'
+        //         );
+        //     }
+        //     return isDuplicate;
+        // }
 
         //     // Kiểm tra tên phim
         //     const maPhim = $('#MaPhim');
