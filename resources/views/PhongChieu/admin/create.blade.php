@@ -57,7 +57,7 @@
                 @enderror
             </div>
             <div class="rounded text-center my-5" style="background-color: #5F6D7E">
-                <button id="btn_submit" type="submit " class="border-0 bg-transparent py-2 w-100 text-white">
+                <button id="btn_submit" type="submit" class="border-0 bg-transparent py-2 w-100 text-white">
                     Thêm phòng chiếu
                 </button>
             </div>
@@ -92,32 +92,36 @@
 
 @section('script')
     <script>
-        $(document).on('click', '#btn_submit', function(e) {
-            e.preventDefault();
-            let isvalid = true;
+        $(document).ready(function() {
 
-            // kiểm tra tên phòng
-            const roomName = $('#TenPhong');
-            let roomNameVal = roomName.val();
-            roomName.parent().find('.text-danger').remove();
+            // Kiểm tra tên phòng
+            fucntion roomName() {
+                const roomName = $('#TenPhong');
+                let roomNameVal = roomName.val();
+                roomName.parent().find('.text-danger').remove();
 
-            if (!roomNameVal) {
-                roomName.parent().append('<div class="text-danger fw-bold">Tên phòng không được bỏ trống</div>');
-                isvalid = false;
-            } else if (roomNameVal.length > 20) {
-                roomName.parent().append(
-                    '<div class="text-danger fw-bold">Tên phòng không được vượt quá 20 ký tự</div>');
-                isvalid = false;
-            } else if (!/^[\p{L}\p{N}\s]+$/u.test(roomNameVal)) {
-                roomName.parent().append(
-                    '<div class="text-danger fw-bold">Tên phòng chỉ gồm chữ cái, số và khoảng trắng</div>');
-                isvalid = false;
-            } else {
-                if (isRoomDuplicate(roomNameVal)) {
-                    roomName.parent().append('<div class="text-danger fw-bold">Tên phòng đã tồn tại</div>');
-                    isvalid = false;
+                if (!roomNameVal) {
+                    roomName.parent().append(
+                        '<div class="text-danger fw-bold">Tên phòng không được bỏ trống</div>');
+                    return = false;
+                } else if (roomNameVal.length > 20) {
+                    roomName.parent().append(
+                        '<div class="text-danger fw-bold">Tên phòng không được vượt quá 20 ký tự</div>');
+                    return = false;
+                } else if (!/^[\p{L}\p{N}\s]+$/u.test(roomNameVal)) {
+                    roomName.parent().append(
+                        '<div class="text-danger fw-bold">Tên phòng chỉ gồm chữ cái, số và khoảng trắng</div>'
+                    );
+                    return = false;
+                } else {
+                    if (isRoomDuplicate(roomNameVal)) {
+                        roomName.parent().append('<div class="text-danger fw-bold">Tên phòng đã tồn tại</div>');
+                        return = false;
+                    }
                 }
+                return true;
             }
+
 
             function isRoomDuplicate(roomNameVal) {
                 let isDuplicate = false;
@@ -136,53 +140,174 @@
                 return isDuplicate;
             }
 
-            // kiểm tra số lượng ghế
-            const soLuongGhe = $('#so-luong-ghe');
-            let soLuongGheVal = soLuongGhe.val();
-            soLuongGhe.parent().find('.text-danger').remove();
+            // Kiểm tra số lượng ghế
+            function soLuongGhe() {
+                const soLuongGhe = $('#so-luong-ghe');
+                let soLuongGheVal = soLuongGhe.val();
+                soLuongGhe.parent().find('.text-danger').remove();
 
-            if (!soLuongGheVal) {
-                soLuongGhe.parent().append(
-                    '<div class="text-danger fw-bold">Số lượng ghế không được bỏ trống</div>');
-                isvalid = false;
-            } else if (!/^[1-9]\d*$/.test(soLuongGheVal)) {
-                soLuongGhe.parent().append(
-                    '<div class="text-danger fw-bold">Số lượng ghế chỉ được phép là số nguyên lớn hơn 0</div>');
-                isvalid = false;
-            } else if (soLuongGheVal < 1) {
-                soLuongGhe.parent().append(
-                    '<div class="text-danger fw-bold">Số lượng ghế phải là số nguyên lớn hơn 0</div>');
-                isvalid = false;
-            } else if (soLuongGheVal > 50) {
-                soLuongGhe.parent().append('<div class="text-danger fw-bold">Số lượng ghế tối đa là 50</div>');
-                isvalid = false;
+                if (!soLuongGheVal) {
+                    soLuongGhe.parent().append(
+                        '<div class="text-danger fw-bold">Số lượng ghế không được bỏ trống</div>');
+                    return = false;
+                } else if (!/^[1-9]\d*$/.test(soLuongGheVal)) {
+                    soLuongGhe.parent().append(
+                        '<div class="text-danger fw-bold">Số lượng ghế chỉ được phép là số nguyên lớn hơn 0</div>'
+                        );
+                    return = false;
+                } else if (soLuongGheVal < 1) {
+                    soLuongGhe.parent().append(
+                        '<div class="text-danger fw-bold">Số lượng ghế phải là số nguyên lớn hơn 0</div>');
+                    return = false;
+                } else if (soLuongGheVal > 50) {
+                    soLuongGhe.parent().append('<div class="text-danger fw-bold">Số lượng ghế tối đa là 50</div>');
+                    return = false;
+                }
+                return true;
             }
 
-            // kiểm tra tình trạng
-            const tinhTrang = $('#tinh-trang');
-            let tinhTrangVal = tinhTrang.val();
-            tinhTrang.parent().find('.text-danger').remove();
+            // Kiểm tra tình trạng
+            function tinhTrang() {
+                const tinhTrang = $('select[name="TinhTrang"]');
+                let tinhTrangVal = tinhTrang.val();
+                tinhTrang.parent().find('.text-danger').remove();
 
-            if (!tinhTrangVal) {
-                tinhTrang.parent().append(
-                    '<div class="text-danger fw-bold">Vui lòng chọn tình trạng của phòng</div>');
-                isvalid = false;
+                if (!tinhTrangVal) {
+                    tinhTrang.parent().append(
+                        '<div class="text-danger fw-bold">Vui lòng chọn tình trạng của phòng</div>');
+                    return = false;
+                }
+                return true;
             }
 
-            // kiểm tra loại phòng
-            const loaiPhong = $('#LoaiPhong');
-            let loaiPhongVal = loaiPhong.val();
-            loaiPhong.parent().find('.text-danger').remove();
+            // Kiểm tra loại phòng
+            function loaiPhong() {
+                const loaiPhong = $('select[name="LoaiPhong"]');
+                let loaiPhongVal = loaiPhong.val();
+                loaiPhong.parent().find('.text-danger').remove();
 
-            if (!loaiPhongVal) {
-                loaiPhong.parent().append('<div class="text-danger fw-bold">Loại phòng không được bỏ trống</div>');
-                isvalid = false;
+                if (!loaiPhongVal) {
+                    loaiPhong.parent().append(
+                        '<div class="text-danger fw-bold">Loại phòng không được bỏ trống</div>');
+                    return = false;
+                }
+                return true;
             }
 
-            if (isvalid) {
-                this.submit();
-            }
+            // Kiểm tra dữ liệu trước khi submit
+            $('#form').submit(function(e) {
+                e.preventDefault();
+                let isvalid = true;
 
+                if (!roomName()) {
+                    isvalid = false;
+                }
+                if (!soLuongGhe()) {
+                    isvalid = false;
+                }
+                if (!tinhTrang()) {
+                    isvalid = false;
+                }
+                if (!loaiPhong()) {
+                    isvalid = false;
+                }
+                if (isvalid) {
+                    $('#form').submit();
+                }
+            });
         });
+
+        // $(document).on('click', '#btn_submit', function(e) {
+        //     e.preventDefault();
+        //     let isvalid = true;
+
+        //     // kiểm tra tên phòng
+        //     const roomName = $('#TenPhong');
+        //     let roomNameVal = roomName.val();
+        //     roomName.parent().find('.text-danger').remove();
+
+        //     if (!roomNameVal) {
+        //         roomName.parent().append('<div class="text-danger fw-bold">Tên phòng không được bỏ trống</div>');
+        //         isvalid = false;
+        //     } else if (roomNameVal.length > 20) {
+        //         roomName.parent().append(
+        //             '<div class="text-danger fw-bold">Tên phòng không được vượt quá 20 ký tự</div>');
+        //         isvalid = false;
+        //     } else if (!/^[\p{L}\p{N}\s]+$/u.test(roomNameVal)) {
+        //         roomName.parent().append(
+        //             '<div class="text-danger fw-bold">Tên phòng chỉ gồm chữ cái, số và khoảng trắng</div>');
+        //         isvalid = false;
+        //     } else {
+        //         if (isRoomDuplicate(roomNameVal)) {
+        //             roomName.parent().append('<div class="text-danger fw-bold">Tên phòng đã tồn tại</div>');
+        //             isvalid = false;
+        //         }
+        //     }
+
+        // function isRoomDuplicate(roomNameVal) {
+        //     let isDuplicate = false;
+        //     $.ajax({
+        //         url: '{{ route('phongchieus.checkDuplicate') }}',
+        //         type: 'POST',
+        //         async: false,
+        //         data: {
+        //             _token: '{{ csrf_token() }}',
+        //             TenPhong: roomNameVal
+        //         },
+        //         success: function(response) {
+        //             isDublicate = response.isDublicate;
+        //         }
+        //     });
+        //     return isDuplicate;
+        // }
+
+        //     // kiểm tra số lượng ghế
+        //     const soLuongGhe = $('#so-luong-ghe');
+        //     let soLuongGheVal = soLuongGhe.val();
+        //     soLuongGhe.parent().find('.text-danger').remove();
+
+        //     if (!soLuongGheVal) {
+        //         soLuongGhe.parent().append(
+        //             '<div class="text-danger fw-bold">Số lượng ghế không được bỏ trống</div>');
+        //         isvalid = false;
+        //     } else if (!/^[1-9]\d*$/.test(soLuongGheVal)) {
+        //         soLuongGhe.parent().append(
+        //             '<div class="text-danger fw-bold">Số lượng ghế chỉ được phép là số nguyên lớn hơn 0</div>');
+        //         isvalid = false;
+        //     } else if (soLuongGheVal < 1) {
+        //         soLuongGhe.parent().append(
+        //             '<div class="text-danger fw-bold">Số lượng ghế phải là số nguyên lớn hơn 0</div>');
+        //         isvalid = false;
+        //     } else if (soLuongGheVal > 50) {
+        //         soLuongGhe.parent().append('<div class="text-danger fw-bold">Số lượng ghế tối đa là 50</div>');
+        //         isvalid = false;
+        //     }
+
+        //     // kiểm tra tình trạng
+        //     const tinhTrang = $('#tinh-trang');
+        //     let tinhTrangVal = tinhTrang.val();
+        //     tinhTrang.parent().find('.text-danger').remove();
+
+        //     if (!tinhTrangVal) {
+        //         tinhTrang.parent().append(
+        //             '<div class="text-danger fw-bold">Vui lòng chọn tình trạng của phòng</div>');
+        //         isvalid = false;
+        //     }
+
+        //     // kiểm tra loại phòng
+        //     const loaiPhong = $('#LoaiPhong');
+        //     let loaiPhongVal = loaiPhong.val();
+        //     loaiPhong.parent().find('.text-danger').remove();
+
+        //     if (!loaiPhongVal) {
+        //         loaiPhong.parent().append('<div class="text-danger fw-bold">Loại phòng không được bỏ trống</div>');
+        //         isvalid = false;
+        //     }
+
+        //     if (isvalid) {
+        //         this.submit();
+        //     }
+
+        // });
     </script>
 @endsection
