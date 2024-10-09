@@ -16,7 +16,7 @@ class LoaiPhongSeeder extends Seeder
     {
         $faker = Faker::create();
         $loaiphongs = ['2D', '3D', 'IMAX', '4DX'];
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 6; $i++) {
             LoaiPhong::create([
                 'TenLoaiPhong' => $loaiphongs[$i],
             ]);
