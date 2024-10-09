@@ -167,6 +167,7 @@
                         return false;
                     }
                 }
+                return true;
             }
 
             function image() {
@@ -190,6 +191,7 @@
                         return false;
                     }
                 }
+                return true;
             }
 
             function category() {
@@ -213,6 +215,7 @@
                         '<div class="text-danger fw-bold">Tên nhà cung cấp không được bỏ trống</div>');
                     return false;
                 }
+                return true;
             }
 
             function duration() {
@@ -236,6 +239,7 @@
                         );
                     return false;
                 }
+                return true;
             }
 
             function releaseDate() {
@@ -256,6 +260,7 @@
                         return false;
                     }
                 }
+                return true;
             }
 
             function status() {
@@ -267,6 +272,7 @@
                     status.parent().append('<div class="text-danger fw-bold">Trạng thái không được bỏ trống</div>');
                     return false;
                 }
+                return true;
             }
 
             function description() {
@@ -286,6 +292,7 @@
                         '<div class="text-danger fw-bold">Tóm tắt phim vượt quá 1000 ký tự</div>');
                     return false;
                 }
+                return true;
             }
 
             $('#form').submit(function(event) {

@@ -147,7 +147,7 @@
 
     <script>
         $(document).ready(function() {
-            
+
             function tenSuKien() {
                 const tenSuKien = $('#ten-su-kien');
                 let tenSuKienInput = tenSuKien.val();
@@ -158,7 +158,7 @@
                 } else if (tenSuKienInput.length > 255) {
                     tenSuKien.parent().append('<div class="text-danger fw-bold">Tên tin tức không quá 255 ký tự</div>');
                     return false;
-                } else if (!/^[a-zA-Z0-9 ]+$/.test(tenSuKienInput)) {
+                } else if (!/^[a-zA-Z0-9]+$/.test(tenSuKienInput)) {
                     tenSuKien.parent().append(
                         '<div class="text-danger fw-bold">Tên tin tức không chứa ký tự đặc biệt</div>');
                     return false;
