@@ -72,13 +72,18 @@ class PhongChieuController extends Controller
         //     return redirect()->back()->with('mess_fail', 'Vui lòng nhập đầy đủ thông tin');
         // }
 
-
-        PhongChieu::create([
-            'TenPhong' => $request->input('TenPhong'),
-            'SoLuongGhe' => $request->input('SoLuongGhe'),
-            'TinhTrang' => $request->input('TinhTrang'),
-            'MaLoaiPhong' => $request->input('LoaiPhong'),
-        ]);
+        $phongChieu = new PhongChieu();
+        $phongChieu->TenPhong = $request->input('TenPhong');
+        $phongChieu->SoLuongGhe = $request->input('SoLuongGhe');
+        $phongChieu->TinhTrang = $request->input('TinhTrang');
+        $phongChieu->MaLoaiPhong = $request->input('LoaiPhong');
+        $phongChieu->save();
+        // PhongChieu::create([
+        //     'TenPhong' => $request->input('TenPhong'),
+        //     'SoLuongGhe' => $request->input('SoLuongGhe'),
+        //     'TinhTrang' => $request->input('TinhTrang'),
+        //     'MaLoaiPhong' => $request->input('LoaiPhong'),
+        // ]);
         return redirect()->route('phongchieus.index')->with('mess_success', 'Thêm phòng thành công');
     }
 
