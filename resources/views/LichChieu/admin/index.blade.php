@@ -111,14 +111,13 @@
             } else {
                 $('.text-error').text('');
                 $('.phong-chieu').attr('disabled', false);
-
-                function checkAndSubmitForm() {
-                    var selectDate = $('#selectDate').val();
-                    $('#findInfoWithDate').submit();
-                }
             }
         });
 
-        
+
+        // function checkAndSubmitForm() {
+        //     var selectDate = $('#selectDate').val();
+        //     $('#findInfoWithDate').submit();
+        // }
     </script>
 @endsection
