@@ -118,7 +118,7 @@
                 </h4>
             </div>
             <div class="">
-                <button type="submit" id="btn_submit" class="d-flex flex-column gap-2 text-center">
+                <button id="btn_submit" class="d-flex flex-column gap-2 text-center">
                     <svg width="56" height="56" viewBox="0 0 56 56" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -136,7 +136,7 @@
 
 @section('js')
     <script>
-         $(document).ready(function() {
+        $(document).ready(function() {
 
             const voucherTrue = 'DUONG';
 
@@ -185,6 +185,11 @@
                 }
             });
         });
+
+        // $('#btn_submit').click(function(e) {
+        //     e.preventDefault();
+        //     $('#formVoucher').submit();
+        // });
 
 
 
