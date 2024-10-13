@@ -12,8 +12,16 @@
             </div>
             <div class="w-75 m-auto mt-4">
                 <h4>Nhập voucher nếu có</h4>
-                <form action="{{ route('datves.thanhToanOnline') }}" method="post" class="mt-2" id="formVoucher">
+                <form action="{{ route('datves.thanhToanOnline') }}" method="POST" class="mt-2" id="formVoucher">
                     @csrf
+                    <div>
+                        <input type="text" id="voucher" name="MaVoucher" class="form-control"
+                            style="max-width: 200px;">
+                        @error('MaVoucher')
+                            <div class="text-danger fw-bold">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div>
                         <input type="text" id="voucher" name="MaVoucher" class="form-control"
                             style="max-width: 200px;">
@@ -118,7 +126,7 @@
                 </h4>
             </div>
             <div class="">
-                <button type="submit" id="btn_submit" class="d-flex flex-column gap-2 text-center">
+                <a onclick="submitForm()" id="btn_submit" class="d-flex flex-column gap-2 text-center">
                     <svg width="56" height="56" viewBox="0 0 56 56" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -136,36 +144,28 @@
 
 @section('js')
     <script>
-         $(document).ready(function() {
-
-            const voucherTrue = 'DUONG';
+        $(document).ready(function() {
 
             function voucher() {
                 const voucher = $('#voucher');
                 let voucherValue = voucher.val();
+                const voucherTrue = 'DUONG';
                 voucher.parent().find('.text-danger').remove();
 
-                // Kiểm tra nếu voucher không đúng với voucherTrue
                 if (voucherValue !== voucherTrue) {
-                    voucher.parent().append('<span class="text-danger fw-bold">Mã voucher không hợp lệ</span>');
+                    voucher.parent().append('<span class="text-danger fw-bold">Mã voucher không tồn tại</span>');
                     return false;
                 }
-
-                // Kiểm tra voucher chỉ chứa chữ cái và số
                 if (!/^[a-zA-Z0-9]+$/.test(voucherValue)) {
                     voucher.parent().append(
-                        '<span class="text-danger fw-bold">Mã voucher chỉ được chứa chữ cái và số</span>');
+                        '<span class="text-danger fw-bold">Mã voucher chỉ được chứa chữ cái, số</span>');
                     return false;
                 }
-
-                // Kiểm tra độ dài của mã voucher
                 if (voucherValue.length > 12) {
                     voucher.parent().append(
                         '<span class="text-danger fw-bold">Mã voucher không được vượt quá 12 ký tự</span>');
                     return false;
                 }
-
-                // Nếu tất cả đều hợp lệ, trả về true
                 return true;
             }
 
@@ -178,13 +178,15 @@
                 }
 
                 if (isVaild) {
-                    console.log("Form is valid, submitting");
-                    $('#formVoucher').off('submit').submit();
-                } else {
-                    console.log("Form is invalid");
+                    $('#formVoucher').unbind('submit').submit();
                 }
             });
         });
+
+        // $('#btn_submit').click(function(e) {
+        //     e.preventDefault();
+        //     $('#formVoucher').submit();
+        // });
 
 
 
