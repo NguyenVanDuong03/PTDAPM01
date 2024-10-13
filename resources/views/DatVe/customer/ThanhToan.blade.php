@@ -22,6 +22,14 @@
                         @enderror
                     </div>
 
+                    <div>
+                        <input type="text" id="voucher" name="MaVoucher" class="form-control"
+                            style="max-width: 200px;">
+                        @error('MaVoucher')
+                            <div class="text-danger fw-bold">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </form>
             </div>
             <div class="w-75 m-auto mt-4">
@@ -126,7 +134,7 @@
                             fill="white" />
                     </svg>
                     <span class="fw-medium fs-5 text-white">Tiếp theo</span>
-                </a>
+                </button>
             </div>
         </div>
         {{-- END --}}
