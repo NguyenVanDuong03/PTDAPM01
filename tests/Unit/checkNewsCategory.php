@@ -45,3 +45,4 @@ class checkNewsCategory extends TestCase
     }
 
 }
+

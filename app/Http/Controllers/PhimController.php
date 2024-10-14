@@ -46,29 +46,31 @@ class PhimController extends Controller
             'MaTheLoai' => ['required'],
             'MaNCC' => ['required'],
             'TenPhim' => ['required', 'unique:phims,TenPhim', 'max:100', 'regex:/^[\p{L}\p{N}\s]+$/u'],
-            'ThoiLuong' => ['required', 'max:300', 'regex:/^[1-9][0-9]*$/'],
-            'NgayCongChieu' => ['required', 'date'],
-            'image' => ['required', 'mimes:jpeg,png', 'max:5120'],
+            'ThoiLuong' => ['required', 'numeric','max:300', 'regex:/^[1-9][0-9]*$/'],
+            'NgayCongChieu' => ['required', 'after_or_equal:today'],
             'TrangThai' => ['required'],
             'TomTat' => ['required', 'min:50', 'max: 1000'],
+            'image' => ['required', 'mimes:jpg,png', 'max:5120'],
         ], [
-            'MaTheLoai.required' => '',
-            'MaNCC.required' => '',
-            'TenPhim.required' => '',
-            'TenPhim.unique' => '',
-            'TenPhim.max' => '',
-            'TenPhim.regex' => '',
-            'ThoiLuong.required' => '',
-            'ThoiLuong.regex' => '',
-            'ThoiLuong.max' => '',
-            'NgayCongChieu.required' => '',
-            'TrangThai.required' => '',
-            'image.required' => '',
-            'image.mimes' => '',
-            'image.max' => '',
-            'TomTat.required' => '',
-            'TomTat.min' => '',
-            'TomTat.max' => ''
+            'MaTheLoai.required' => 'Tên thể loại không được bỏ trống',
+            'MaNCC.required' => 'Tên nhà cung cấp không được bỏ trống',
+            'TenPhim.required' => 'Tên phim không được bỏ trống',
+            'TenPhim.unique' => 'Phim đã tồn tại',
+            'TenPhim.max' => 'Tên phim vượt quá 100 ký tự',
+            'TenPhim.regex' => 'Tên phim không được chứa ký tự đặc biệt',
+            'ThoiLuong.required' => 'Thời lượng phim không được bỏ trống',
+            'ThoiLuong.regex' => 'Thời lượng phim phải là số dương',
+            'ThoiLuong.max' => 'Thời lượng phim quá 300 phút',
+            'ThoiLuong.numeric' => 'Thời lượng phim không được chứa ký tự đặc biệt và chữ',
+            'NgayCongChieu.required' => 'Ngày công chiếu không được bỏ trống',
+            'NgayCongChieu.after_or_equal' => 'Ngày công chiếu không được trong quá khứ',
+            'TrangThai.required' => 'Trạng thái không được bỏ trống',
+            'image.required' => 'Ảnh phim không được bỏ trống',
+            'image.mimes' => 'Ảnh phải có định dạng JPG, PNG.',
+            'image.max' => 'Ảnh phim vượt quá 5MB',
+            'TomTat.required' => 'Tóm tắt không được bỏ trống',
+            'TomTat.min' => 'Tóm tắt phim không đủ 50 ký tự',
+            'TomTat.max' => 'Tóm tắt phim vượt quá 1000 ký tự'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -80,7 +82,7 @@ class PhimController extends Controller
         $phim->ThoiLuong = $request->input('ThoiLuong');
         $phim->NgayCongChieu = $request->input('NgayCongChieu');
         $phim->TrangThai = $request->input('TrangThai');
-        $phim->TomTat = $request->input('TomTat');
+        $phim->MoTa = $request->input('TomTat');
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');

@@ -43,5 +43,4 @@ class checkNameOfPostingStaff extends TestCase
 
         $response->assertInvalid(['TenDangNhapNV']);
     }
-
 }
