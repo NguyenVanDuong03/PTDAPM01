@@ -50,14 +50,14 @@ class LichChieuController extends Controller
     }
     public function create_form(Request $request){
         $validator = Validator::make($request->all(), [
-            // 'NgayChieu' => ['required', 'date'],
-            // 'MaPhong' => ['required', 'exists:phongchieus,MaPhong'],
+            'NgayChieu' => ['required', 'date'],
+            'MaPhong' => ['required', 'exists:phongchieus,MaPhong'],
         ],
         [
-            // 'NgayChieu.required' => 'Vui lòng chọn ngày chiếu',
-            // 'NgayChieu.date' => 'Ngày chiếu không hợp lệ',
-            // 'MaPhong.required' => 'Vui lòng chọn phòng chiếu',
-            // 'MaPhong.exists' => 'Phòng chiếu không tồn tại',
+            'NgayChieu.required' => 'Vui lòng chọn ngày chiếu',
+            'NgayChieu.date' => 'Ngày chiếu không hợp lệ',
+            'MaPhong.required' => 'Vui lòng chọn phòng chiếu',
+            'MaPhong.exists' => 'Phòng chiếu không tồn tại',
         ]);
         $phims = Phim::all();
         $phongchieus = PhongChieu::all();

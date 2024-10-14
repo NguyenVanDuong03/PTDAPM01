@@ -219,7 +219,7 @@
                 maPhim.parent().find('.text-danger').remove();
 
                 if (!maPhimValue) {
-                    maPhim.parent().append('<div class="text-danger fw-bold">Tên phim không được bỏ trống.</div>');
+                    maPhim.parent().append('<div class="text-danger fw-bold">Phim không được bỏ trống.</div>');
                     return false;
                 }
                 return true;

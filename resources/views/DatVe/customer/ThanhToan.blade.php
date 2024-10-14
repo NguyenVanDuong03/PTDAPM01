@@ -10,24 +10,26 @@
             <div class="title text-center">
                 <h3 class="text-success fw-bold">Sự Hài Lòng Của Các Bạn Là Sự Thành Công Của Chúng Tôi</h3>
             </div>
-            {{-- <div class="w-75 m-auto mt-4">
-                <h4>Giảm giá</h4>
-                <div class="d-flex gap-3 p-2 border border-dark rounded-2">
-                    <label for="voucher" class="d-flex align-items-center mb-0">Galaxy Voucher</label>
-                    <select name="Voucher" id="voucher" class="py-2 rounded-2 px-5">
-                        <option selected></option>
-                        <option value="">123123121231221</option>
-                    </select>
-                </div>
-            </div> --}}
             <div class="w-75 m-auto mt-4">
                 <h4>Nhập voucher nếu có</h4>
-                <form action="{{route('datves.thanhToanOnline')}}" method="post" class="mt-2" id="formVoucher">
+                <form action="{{ route('datves.thanhToanOnline') }}" method="POST" class="mt-2" id="formVoucher">
                     @csrf
-                    <input type="text" name="MaVoucher" class="form-control" style="max-width: 200px;">
-                    @error('VoucherKhongHopLe')
-                        <span class="text-danger fw-bold">{{$message}}</span>
-                    @enderror
+                    <div>
+                        <input type="text" id="voucher" name="MaVoucher" class="form-control"
+                            style="max-width: 200px;">
+                        @error('MaVoucher')
+                            <div class="text-danger fw-bold">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <input type="text" id="voucher" name="MaVoucher" class="form-control"
+                            style="max-width: 200px;">
+                        @error('MaVoucher')
+                            <div class="text-danger fw-bold">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </form>
             </div>
             <div class="w-75 m-auto mt-4">
@@ -124,7 +126,7 @@
                 </h4>
             </div>
             <div class="">
-                <a onclick="submitForm()" class="d-flex flex-column gap-2 text-center">
+                <a onclick="submitForm()" id="btn_submit" class="d-flex flex-column gap-2 text-center">
                     <svg width="56" height="56" viewBox="0 0 56 56" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -132,7 +134,7 @@
                             fill="white" />
                     </svg>
                     <span class="fw-medium fs-5 text-white">Tiếp theo</span>
-                </a>
+                </button>
             </div>
         </div>
         {{-- END --}}
@@ -142,20 +144,66 @@
 
 @section('js')
     <script>
-        function submitForm(){
-            document.getElementById('formVoucher').submit();
-        }
-        document.querySelectorAll('input[name="ThanhToan"]').forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                document.querySelectorAll('input[name="ThanhToan"]').forEach(function(otherRadio) {
-                    if (otherRadio !== radio) {
-                        const otherPaymentMethodInfo = document.getElementById(
-                            `${otherRadio.id}Info`);
-                        otherPaymentMethodInfo.style.display = 'none';
-                    }
-                });
+        $(document).ready(function() {
 
+            function voucher() {
+                const voucher = $('#voucher');
+                let voucherValue = voucher.val();
+                const voucherTrue = 'DUONG';
+                voucher.parent().find('.text-danger').remove();
+
+                if (voucherValue !== voucherTrue) {
+                    voucher.parent().append('<span class="text-danger fw-bold">Mã voucher không tồn tại</span>');
+                    return false;
+                }
+                if (!/^[a-zA-Z0-9]+$/.test(voucherValue)) {
+                    voucher.parent().append(
+                        '<span class="text-danger fw-bold">Mã voucher chỉ được chứa chữ cái, số</span>');
+                    return false;
+                }
+                if (voucherValue.length > 12) {
+                    voucher.parent().append(
+                        '<span class="text-danger fw-bold">Mã voucher không được vượt quá 12 ký tự</span>');
+                    return false;
+                }
+                return true;
+            }
+
+            $('#formVoucher').submit(function(e) {
+                e.preventDefault();
+                let isVaild = true;
+
+                if (!voucher()) {
+                    isVaild = false;
+                }
+
+                if (isVaild) {
+                    $('#formVoucher').unbind('submit').submit();
+                }
             });
         });
+
+        // $('#btn_submit').click(function(e) {
+        //     e.preventDefault();
+        //     $('#formVoucher').submit();
+        // });
+
+
+
+        // function submitForm() {
+        //     document.getElementById('formVoucher').submit();
+        // }
+        // document.querySelectorAll('input[name="ThanhToan"]').forEach(function(radio) {
+        //     radio.addEventListener('change', function() {
+        //         document.querySelectorAll('input[name="ThanhToan"]').forEach(function(otherRadio) {
+        //             if (otherRadio !== radio) {
+        //                 const otherPaymentMethodInfo = document.getElementById(
+        //                     `${otherRadio.id}Info`);
+        //                 otherPaymentMethodInfo.style.display = 'none';
+        //             }
+        //         });
+
+        //     });
+        // });
     </script>
 @endsection
