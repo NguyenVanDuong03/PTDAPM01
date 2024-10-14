@@ -52,22 +52,23 @@ class PhongChieuController extends Controller
             'TinhTrang' => ['required'],
             'LoaiPhong' => ['required'],
         ], [
-            // 'SoLuongGhe.min' => 'Thêm không thành công. Vui lòng nhập đầy đủ thông tin',
-            'TenPhong.required' => '',
-            'TenPhong.unique' => '',
-            'TenPhong.max' => '',
-            'TenPhong.regex' => '',
-            'SoLuongGhe.max' => '',
-            'SoLuongGhe.required' => '',
-            'SoLuongGhe.numeric' => '',
-            'SoLuongGhe.regex' => '',
-            'TinhTrang.required' => '',
-            'LoaiPhong.required' => '',
+
+            'TenPhong.required' => 'Tên phòng không được bỏ trống',
+            'TenPhong.unique' => 'Phòng đã tồn tại',
+            'TenPhong.max' => 'Tên phòng không được vượt quá 20 ký tự',
+            'TenPhong.regex' => 'Tên phòng chỉ gồm chữ cái, số và khoảng trắng',
+            'SoLuongGhe.max' => 'Số lượng ghế tối đa là 50',
+            'SoLuongGhe.required' => 'Số lượng ghế không được bỏ trống',
+            'SoLuongGhe.numeric' => 'Số lượng ghế phải là số nguyên lớn hơn 0',
+            'SoLuongGhe.regex' => 'Số lượng ghế chỉ được phép là số nguyên lớn hơn 0',
+            'TinhTrang.required' => 'Vui lòng chọn tình trạng của phòng',
+            'LoaiPhong.required' => 'Loại phòng không được bỏ trống',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+        
         // if ($request->input('TinhTrang') === "none") {
         //     return redirect()->back()->with('mess_fail', 'Vui lòng nhập đầy đủ thông tin');
         // }

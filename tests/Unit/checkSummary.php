@@ -73,5 +73,4 @@ class checkSummary extends TestCase
 
         $response->assertInvalid(['TomTat']);
     }
-
 }

@@ -47,26 +47,26 @@ class DoAnController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'Anh' => ['required', 'max:20480', 'mimes:jpeg,jpg,png, gif'],
+            'Anh' => ['required', 'max:20480', 'mimes:jpeg,jpg,png,gif'],
             'TenDoAn' => ['required', 'regex:/^[\p{L}\p{N}\s]+$/u', 'max:255'],
             'MaTheLoai' => ['required'],
             'MoTa' => ['required', 'min:50', 'regex:/^[\p{L}\p{N}\s]+$/u'],
             'Gia' => ['required', 'numeric', 'min:1000'],
             'TinhTrang' => ['required'],
         ], [
-            'Anh.required' => '',
-            'Anh.mimes' => '',
-            'Anh.max' => '',
-            'TenDoAn.required' => '',
-            'TenDoAn.max' => '',
-            'TenDoAn.regex' => '',
-            'MaTheLoai.required' => '',
-            'MoTa.required' => '',
-            'MoTa.min' => '',
-            'MoTa.regex' => '',
-            'Gia.required' => '',
-            'Gia.min' => '',
-            'TinhTrang.required' => '',
+            'Anh.required' => 'Ảnh đồ ăn không được bỏ trống',
+            'Anh.mimes' => 'Ảnh phải có định dạng JPG, PNG, GIF',
+            'Anh.max' => 'Ảnh không vượt quá 20MB',
+            'TenDoAn.required' => 'Tên đồ ăn không được bỏ trống',
+            'TenDoAn.max' => 'Tên đồ ăn không quá 255 ký tự',
+            'TenDoAn.regex' => 'Tên đồ ăn không chứa ký tự đặc biệt',
+            'MaTheLoai.required' => 'Thể loại đồ ăn không được bỏ trống',
+            'MoTa.required' => 'Mô tả đồ ăn không được bỏ trống',
+            'MoTa.min' => 'Mô tả đồ ăn tối thiểu 50 ký tự',
+            'MoTa.regex' => 'Mô tả đồ ăn không chứa ký tự đặc biệt',
+            'Gia.required' => 'Giá đồ ăn không được bỏ trống',
+            'Gia.min' => 'Giá đồ ăn tối thiểu 1000 (VND)',
+            'TinhTrang.required' => 'Trạng thái đồ ăn không được bỏ trống',
         ]);
 
         if ($validator->fails()) {
